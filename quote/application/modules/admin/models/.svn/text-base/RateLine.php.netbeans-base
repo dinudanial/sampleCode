@@ -1,0 +1,449 @@
+<?php
+
+/* Author                : Renesankar(rene@toobler.com)
+ * Company               : Toobler
+ * Email:                : info@toobler.com
+ * Web site              : http://www.toobler.com
+ * Created               : 06/03/2012
+ * Description       	 : 
+ * ==============================================================================================
+ * Change History:
+ * ----------------------------------------------------------------------------------------------
+ * Sl.No.  Date   Author   Description
+ * ----------------------------------------------------------------------------------------------
+ * 	1
+ *
+ *
+ * ----------------------------------------------------------------------------------------------
+ *
+ */
+
+class admin_Model_RateLine {
+
+    private $id;
+    private $rateStartDate;
+    private $rateEndDate;
+    private $basisOfCalculation;
+    private $admittedRate;
+    private $nonAdmittedRate;
+    private $taxMinimum;
+    private $taxMaximum;
+    private $insuredResidenceApplicable;
+    private $deMinimisApplicable;
+    private $band2AdmittedRate;
+    private $band3AdmittedRate;
+    private $band2NonAdmittedRate;
+    private $band3NonAdmittedRate;
+    private $bandApplyProportionately;
+    private $admittedTaxPayableByInsuredAndAdminByInsurerOrAgent;
+    private $admittedTaxPayablebyInsuredandAdministeredByInsurer;
+    private $admittedTaxPayableByInsuredLocally;
+    private $admittedTaxPayableByInsurer;
+    private $nonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent;
+    private $nonAdmittedTaxPayablebyInsuredandAdministeredByInsurer;
+    private $nonAdmittedTaxPayableByInsuredLocally;
+    private $nonAdmittedTaxPayableByInsurer;
+    private $multiplier1Name;
+    private $multiplier1AdmittedRate;
+    private $multiplier1NonAdmittedRate;
+    private $multiplier2Name;
+    private $multiplier2AdmittedRate;
+    private $multiplier2NonAdmittedRate;
+    private $multiplier3Name;
+    private $multiplier3AdmittedRate;
+    private $multiplier3NonAdmittedRate;
+    private $domesticTransportationElement;
+    private $nonFireElementRate;
+    private $layeringPercentage;
+    private $maltaPremiumLevel1StampDuty;
+    private $maltaPremiumLevel1Rate;
+    private $maltaPremiumLevel2StampDuty;
+    private $maltaPremiumLevel2Rate;
+    private $maltaPremiumLevel3StampDuty;
+    private $maltaPremiumLevel3Rate;
+    private $minimumBand1;
+    private $maximumBand1;
+    private $minimumBand2;
+    private $maximumBand2;
+    private $minimumBand3;
+    private $maximumBand3;
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function getRateStartDate() {
+        return $this->rateStartDate;
+    }
+
+    public function setRateStartDate($rateStartDate) {
+        $this->rateStartDate = $rateStartDate;
+    }
+
+    public function getRateEndDate() {
+        return $this->rateEndDate;
+    }
+
+    public function setRateEndDate($rateEndDate) {
+        $this->rateEndDate = $rateEndDate;
+    }
+
+    public function getBasisOfCalculation() {
+        return $this->basisOfCalculation;
+    }
+
+    public function setBasisOfCalculation($basisOfCalculation) {
+        $this->basisOfCalculation = $basisOfCalculation;
+    }
+
+    public function getAdmittedRate() {
+        return $this->admittedRate;
+    }
+
+    public function setAdmittedRate($admittedRate) {
+        $this->admittedRate = $admittedRate;
+    }
+
+    public function getNonAdmittedRate() {
+        return $this->nonAdmittedRate;
+    }
+
+    public function setNonAdmittedRate($nonAdmittedRate) {
+        $this->nonAdmittedRate = $nonAdmittedRate;
+    }
+
+    public function getTaxMinimum() {
+        return $this->taxMinimum;
+    }
+
+    public function setTaxMinimum($taxMinimum) {
+        $this->taxMinimum = $taxMinimum;
+    }
+
+    public function getTaxMaximum() {
+        return $this->taxMaximum;
+    }
+
+    public function setTaxMaximum($taxMaximum) {
+        $this->taxMaximum = $taxMaximum;
+    }
+
+    public function getInsuredResidenceApplicable() {
+        return $this->insuredResidenceApplicable;
+    }
+
+    public function setInsuredResidenceApplicable($insuredResidenceApplicable) {
+        $this->insuredResidenceApplicable = $insuredResidenceApplicable;
+    }
+
+    public function getDeMinimisApplicable() {
+        return $this->deMinimisApplicable;
+    }
+
+    public function setDeMinimisApplicable($deMinimisApplicable) {
+        $this->deMinimisApplicable = $deMinimisApplicable;
+    }
+
+    public function getBand2AdmittedRate() {
+        return $this->band2AdmittedRate;
+    }
+
+    public function setBand2AdmittedRate($band2AdmittedRate) {
+        $this->band2AdmittedRate = $band2AdmittedRate;
+    }
+
+    public function getBand3AdmittedRate() {
+        return $this->band3AdmittedRate;
+    }
+
+    public function setBand3AdmittedRate($band3AdmittedRate) {
+        $this->band3AdmittedRate = $band3AdmittedRate;
+    }
+
+    public function getBand2NonAdmittedRate() {
+        return $this->band2NonAdmittedRate;
+    }
+
+    public function setBand2NonAdmittedRate($band2NonAdmittedRate) {
+        $this->band2NonAdmittedRate = $band2NonAdmittedRate;
+    }
+
+    public function getBand3NonAdmittedRate() {
+        return $this->band3NonAdmittedRate;
+    }
+
+    public function setBand3NonAdmittedRate($band3NonAdmittedRate) {
+        $this->band3NonAdmittedRate = $band3NonAdmittedRate;
+    }
+
+    public function getBandApplyProportionately() {
+        return $this->bandApplyProportionately;
+    }
+
+    public function setBandApplyProportionately($bandApplyProportionately) {
+        $this->bandApplyProportionately = $bandApplyProportionately;
+    }
+
+    public function getAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent() {
+        return $this->admittedTaxPayableByInsuredAndAdminByInsurerOrAgent;
+    }
+
+    public function setAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent($admittedTaxPayableByInsuredAndAdminByInsurerOrAgent) {
+        $this->admittedTaxPayableByInsuredAndAdminByInsurerOrAgent = $admittedTaxPayableByInsuredAndAdminByInsurerOrAgent;
+    }
+
+    public function getAdmittedTaxPayablebyInsuredandAdministeredByInsurer() {
+        return $this->admittedTaxPayablebyInsuredandAdministeredByInsurer;
+    }
+
+    public function setAdmittedTaxPayablebyInsuredandAdministeredByInsurer($admittedTaxPayablebyInsuredandAdministeredByInsurer) {
+        $this->admittedTaxPayablebyInsuredandAdministeredByInsurer = $admittedTaxPayablebyInsuredandAdministeredByInsurer;
+    }
+
+    public function getAdmittedTaxPayableByInsuredLocally() {
+        return $this->admittedTaxPayableByInsuredLocally;
+    }
+
+    public function setAdmittedTaxPayableByInsuredLocally($admittedTaxPayableByInsuredLocally) {
+        $this->admittedTaxPayableByInsuredLocally = $admittedTaxPayableByInsuredLocally;
+    }
+
+    public function getAdmittedTaxPayableByInsurer() {
+        return $this->admittedTaxPayableByInsurer;
+    }
+
+    public function setAdmittedTaxPayableByInsurer($admittedTaxPayableByInsurer) {
+        $this->admittedTaxPayableByInsurer = $admittedTaxPayableByInsurer;
+    }
+
+    public function getNonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent() {
+        return $this->nonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent;
+    }
+
+    public function setNonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent($nonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent) {
+        $this->nonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent = $nonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent;
+    }
+
+    public function getNonAdmittedTaxPayablebyInsuredandAdministeredByInsurer() {
+        return $this->nonAdmittedTaxPayablebyInsuredandAdministeredByInsurer;
+    }
+
+    public function setNonAdmittedTaxPayablebyInsuredandAdministeredByInsurer($nonAdmittedTaxPayablebyInsuredandAdministeredByInsurer) {
+        $this->nonAdmittedTaxPayablebyInsuredandAdministeredByInsurer = $nonAdmittedTaxPayablebyInsuredandAdministeredByInsurer;
+    }
+
+    public function getNonAdmittedTaxPayableByInsuredLocally() {
+        return $this->nonAdmittedTaxPayableByInsuredLocally;
+    }
+
+    public function setNonAdmittedTaxPayableByInsuredLocally($nonAdmittedTaxPayableByInsuredLocally) {
+        $this->nonAdmittedTaxPayableByInsuredLocally = $nonAdmittedTaxPayableByInsuredLocally;
+    }
+
+    public function getNonAdmittedTaxPayableByInsurer() {
+        return $this->nonAdmittedTaxPayableByInsurer;
+    }
+
+    public function setNonAdmittedTaxPayableByInsurer($nonAdmittedTaxPayableByInsurer) {
+        $this->nonAdmittedTaxPayableByInsurer = $nonAdmittedTaxPayableByInsurer;
+    }
+
+    public function getMultiplier1Name() {
+        return $this->multiplier1Name;
+    }
+
+    public function setMultiplier1Name($multiplier1Name) {
+        $this->multiplier1Name = $multiplier1Name;
+    }
+
+    public function getMultiplier1AdmittedRate() {
+        return $this->multiplier1AdmittedRate;
+    }
+
+    public function setMultiplier1AdmittedRate($multiplier1AdmittedRate) {
+        $this->multiplier1AdmittedRate = $multiplier1AdmittedRate;
+    }
+
+    public function getMultiplier1NonAdmittedRate() {
+        return $this->multiplier1NonAdmittedRate;
+    }
+
+    public function setMultiplier1NonAdmittedRate($multiplier1NonAdmittedRate) {
+        $this->multiplier1NonAdmittedRate = $multiplier1NonAdmittedRate;
+    }
+
+    public function getMultiplier2Name() {
+        return $this->multiplier2Name;
+    }
+
+    public function setMultiplier2Name($multiplier2Name) {
+        $this->multiplier2Name = $multiplier2Name;
+    }
+
+    public function getMultiplier2AdmittedRate() {
+        return $this->multiplier2AdmittedRate;
+    }
+
+    public function setMultiplier2AdmittedRate($multiplier2AdmittedRate) {
+        $this->multiplier2AdmittedRate = $multiplier2AdmittedRate;
+    }
+
+    public function getMultiplier2NonAdmittedRate() {
+        return $this->multiplier2NonAdmittedRate;
+    }
+
+    public function setMultiplier2NonAdmittedRate($multiplier2NonAdmittedRate) {
+        $this->multiplier2NonAdmittedRate = $multiplier2NonAdmittedRate;
+    }
+
+    public function getMultiplier3Name() {
+        return $this->multiplier3Name;
+    }
+
+    public function setMultiplier3Name($multiplier3Name) {
+        $this->multiplier3Name = $multiplier3Name;
+    }
+
+    public function getMultiplier3AdmittedRate() {
+        return $this->multiplier3AdmittedRate;
+    }
+
+    public function setMultiplier3AdmittedRate($multiplier3AdmittedRate) {
+        $this->multiplier3AdmittedRate = $multiplier3AdmittedRate;
+    }
+
+    public function getMultiplier3NonAdmittedRate() {
+        return $this->multiplier3NonAdmittedRate;
+    }
+
+    public function setMultiplier3NonAdmittedRate($multiplier3NonAdmittedRate) {
+        $this->multiplier3NonAdmittedRate = $multiplier3NonAdmittedRate;
+    }
+
+    public function getDomesticTransportationElement() {
+        return $this->domesticTransportationElement;
+    }
+
+    public function setDomesticTransportationElement($domesticTransportationElement) {
+        $this->domesticTransportationElement = $domesticTransportationElement;
+    }
+
+    public function getNonFireElementRate() {
+        return $this->nonFireElementRate;
+    }
+
+    public function setNonFireElementRate($nonFireElementRate) {
+        $this->nonFireElementRate = $nonFireElementRate;
+    }
+
+    public function getLayeringPercentage() {
+        return $this->layeringPercentage;
+    }
+
+    public function setLayeringPercentage($layeringPercentage) {
+        $this->layeringPercentage = $layeringPercentage;
+    }
+
+    public function getMaltaPremiumLevel1StampDuty() {
+        return $this->maltaPremiumLevel1StampDuty;
+    }
+
+    public function setMaltaPremiumLevel1StampDuty($maltaPremiumLevel1StampDuty) {
+        $this->maltaPremiumLevel1StampDuty = $maltaPremiumLevel1StampDuty;
+    }
+
+    public function getMaltaPremiumLevel1Rate() {
+        return $this->maltaPremiumLevel1Rate;
+    }
+
+    public function setMaltaPremiumLevel1Rate($maltaPremiumLevel1Rate) {
+        $this->maltaPremiumLevel1Rate = $maltaPremiumLevel1Rate;
+    }
+
+    public function getMaltaPremiumLevel2StampDuty() {
+        return $this->maltaPremiumLevel2StampDuty;
+    }
+
+    public function setMaltaPremiumLevel2StampDuty($maltaPremiumLevel2StampDuty) {
+        $this->maltaPremiumLevel2StampDuty = $maltaPremiumLevel2StampDuty;
+    }
+
+    public function getMaltaPremiumLevel2Rate() {
+        return $this->maltaPremiumLevel2Rate;
+    }
+
+    public function setMaltaPremiumLevel2Rate($maltaPremiumLevel2Rate) {
+        $this->maltaPremiumLevel2Rate = $maltaPremiumLevel2Rate;
+    }
+
+    public function getMaltaPremiumLevel3StampDuty() {
+        return $this->maltaPremiumLevel3StampDuty;
+    }
+
+    public function setMaltaPremiumLevel3StampDuty($maltaPremiumLevel3StampDuty) {
+        $this->maltaPremiumLevel3StampDuty = $maltaPremiumLevel3StampDuty;
+    }
+
+    public function getMaltaPremiumLevel3Rate() {
+        return $this->maltaPremiumLevel3Rate;
+    }
+
+    public function setMaltaPremiumLevel3Rate($maltaPremiumLevel3Rate) {
+        $this->maltaPremiumLevel3Rate = $maltaPremiumLevel3Rate;
+    }
+
+    public function getMinimumBand1() {
+        return $this->minimumBand1;
+    }
+
+    public function setMinimumBand1($minimumBand1) {
+        $this->minimumBand1 = $minimumBand1;
+    }
+
+    public function getMaximumBand1() {
+        return $this->maximumBand1;
+    }
+
+    public function setMaximumBand1($maximumBand1) {
+        $this->maximumBand1 = $maximumBand1;
+    }
+
+    public function getMinimumBand2() {
+        return $this->minimumBand2;
+    }
+
+    public function setMinimumBand2($minimumBand2) {
+        $this->minimumBand2 = $minimumBand2;
+    }
+
+    public function getMaximumBand2() {
+        return $this->maximumBand2;
+    }
+
+    public function setMaximumBand2($maximumBand2) {
+        $this->maximumBand2 = $maximumBand2;
+    }
+
+    public function getMinimumBand3() {
+        return $this->minimumBand3;
+    }
+
+    public function setMinimumBand3($minimumBand3) {
+        $this->minimumBand3 = $minimumBand3;
+    }
+
+    public function getMaximumBand3() {
+        return $this->maximumBand3;
+    }
+
+    public function setMaximumBand3($maximumBand3) {
+        $this->maximumBand3 = $maximumBand3;
+    }
+
+}
+
+?>

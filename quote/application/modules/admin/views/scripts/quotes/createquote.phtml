@@ -1,0 +1,53 @@
+
+<div class="page-title">
+    <h2>Create Step 2</h2>
+    <ul class="breadcrumb">
+        <li><a href="#">Admin</a><span> > </span>
+        <!--</li><li></li>-->
+        <li><a href="#" class="active">Create step 2</a></li>
+    </ul>
+</div>
+
+<div class="content">
+   	
+    <table cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <?php foreach($this->businessline as $quoteDeatil){?>
+            <td>Quote Details</td>
+            <td>Quote ID <?php echo $quoteDeatil['id']?></td>
+            <td>Name <?php echo $quoteDeatil['name']?></td>
+            <td>Line of Business <?php echo $quoteDeatil['lineofbusiness']?></td>
+            <?php }?>
+        </tr>
+        <tr>
+            <td>Risk Location</td>
+            <td>Registered to pay tax? <input type="checkbox" name="chk" id="chk"></td>
+            <td>Regulatory status checked </td>
+            <td>&nbsp;</td>
+        </tr>
+        <?php foreach($this->country as $countryData){?>
+        <tr>
+            <td height="30"><?php echo $countryData['Country']?></td>
+            <td colspan="3" align="center"><select>
+                    <?php if($countryData['applicable']==0){?>
+                        <option value=""></option>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                      <?php }else{?>
+                        <option value=""></option>
+                        <option value="No">No</option>
+                        <option value="Yes/FOS">Yes/FOS</option>
+                        <?php }?>
+                </select></td>
+            
+        </tr>
+        <?php }?>
+        <tr>
+            <td colspan="4"><input type="button" name="apportion" value="Apportion Premium"></td>
+        </tr>
+    </table>
+   
+	    
+</div>
+
+</div>

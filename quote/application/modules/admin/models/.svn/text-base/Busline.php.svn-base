@@ -1,0 +1,264 @@
+<?php
+
+class admin_Model_Busline 
+{
+     private $lineName;
+     private $insuanceClass;
+     private $enabled;
+     private $id;
+     private $insuranceData;
+    
+     
+     public function setId($id)
+     {
+         if (!is_int($id)) {
+            throw new Exception("Invalid argument exception in setId");
+        }
+        $this->id = $id;
+     }
+     
+     public function getId()
+     {
+         return $this->id;
+     }
+
+
+     public function getlineName() {
+        return $this->lineName;
+     }
+     
+     public function setlineName($lineName)
+     {
+      
+         $this->lineName=$lineName;
+     }
+     
+     public function getinsuranceClass()
+     {
+         return $this->insuanceClass;
+     }
+     
+     public function setinsuranceClass($insuanceClass)
+     {
+        
+         $this->insuanceClass=$insuanceClass;
+     }
+     
+     public function getenabled()
+     {
+         return $this->enabled;
+     }
+     
+     public function setenabled($enabled)
+     {
+         $this->enabled=$enabled;
+     }
+     
+     public function getInsuranceClassData($insuranceClass)
+     {
+         if($insuranceClass==null)
+         {
+              return 0;
+         }   
+         $IC=  admin_Model_Util::getInsuranceClassData($insuranceClass);
+         $insClass=$IC['d__InsuranceClass'];
+        
+         return $insClass;
+     }
+     public function setInsuranceClassData($test)
+     {
+         $this->insuranceData=$test;
+     }
+     
+     public function getInsurance()
+     {
+         return $this->insuranceData;
+     }
+
+     public function saveBuslines(Admin_Model_Busline $busline)
+     {
+         if (null == $busline) {
+            throw new Exception('Invalid argument exception in saveBusline!');
+         }
+         
+         try {
+             
+             $buslineList=array();
+             $buslineList['d__LineName']=$busline->getlineName();
+             $buslineList['ID_InsuranceClass']=$busline->getinsuranceClass();
+             $buslineList['s__Enabled']=$busline->getenabled();
+          
+             
+             $buslinedao=new admin_Model_BuslineDao();
+             $buslinedao->saveBusline($buslineList);
+            
+         } catch (Exception $exc) {
+             echo $exc->getMessage();
+         }
+     }
+     
+     public function editBusline(admin_Model_Busline $busline)
+     {
+         if (null == $busline) {
+            throw new Exception('Invalid argument exception in saveBusline!');
+         }
+         else
+         {
+             try {
+                   $buslineList=array();
+                   $buslineList['d__LineName']=$busline->getlineName();
+                   $buslineList['ID_InsuranceClass']=$busline->getinsuranceClass();
+                   $buslineList['s__Enabled']=$busline->getenabled();
+                   $id=$busline->getId();
+                  
+                   $buslinedao=new admin_Model_BuslineDao();
+                   $buslinedao->editBuslines($buslineList,$id);
+             } catch (Exception $exc) {
+                 echo $exc->getTraceAsString();
+             }
+                  }
+     }
+
+     public function listBuslines()
+      {
+             $businesslines=array();
+             $buslinedao=new admin_Model_BuslineDao();
+             $buslines=$buslinedao->getBuslines();
+        
+             if($buslines)
+             {
+         
+                 foreach($buslines as $bl)
+                 {
+                  $busline=new admin_Model_Busline();
+                  $busline->setId((integer)$bl['ID_LineOfBusiness']);
+                  $busline->setlineName($bl['d__LineName']);
+                  $busline->setinsuranceClass($bl['ID_InsuranceClass']);
+                  $busline->setenabled($bl['s__Enabled']);
+                  $test=$busline->getinsuranceClassData($bl['ID_InsuranceClass']);
+                 // $busline->setInsuranceClassData($test);
+                 array_push($businesslines, $busline);
+                 
+                 }
+               
+                 return $businesslines;
+             }
+            
+             
+      }
+      
+      
+      public function find($buslineId)
+      {
+             if (null == $buslineId || !is_int($buslineId)) {
+                    throw new Exception("Invalid argument exception in find country");
+             }
+             try {
+                $buslineDao =new admin_Model_BuslineDao();
+                $buslineDetails=$buslineDao->findBusline($buslineId);
+                $busline=new admin_Model_Busline();
+                $busline->setId((integer)$buslineDetails['ID_LineOfBusiness']);
+                $busline->setlineName($buslineDetails['d__LineName']); 
+                $busline->setinsuranceClass($buslineDetails['ID_InsuranceClass']);
+                $test=$busline->getInsuranceClassData($buslineDetails['ID_InsuranceClass']);
+                $busline->setInsuranceClassData($test);
+                $busline->setenabled($buslineDetails['s__Enabled']);
+                return $busline;
+             } catch (Exception $exc) {
+                 echo $exc->getMessage();
+             }
+                   
+      }
+      
+      public function searchByInsurance($insuranceId)
+      {
+   
+          if (null == $insuranceId || !is_int($insuranceId)) {
+                    throw new Exception("Invalid argument exception in find country");
+          }
+          
+          try {
+                  $buslineDao =new admin_Model_BuslineDao();
+                  $buslineDetails=$buslineDao->findBuslineByInsurance($insuranceId);
+               
+                  $buslines=array();
+                    if($buslineDetails)
+                    {
+                       
+                       foreach ($buslineDetails as $busDetails)
+                       {
+                          
+                      $busline=new admin_Model_Busline();
+                      $busline->setId((integer)$busDetails['ID_LineOfBusiness']);
+                      $busline->setlineName($busDetails['d__LineName']);
+                      $busline->setenabled($busDetails['s__Enabled']);
+                      $busline->setinsuranceClass($busDetails['ID_InsuranceClass']);
+                      $test=$busline->getInsuranceClassData($busDetails['ID_InsuranceClass']);
+                      $busline->setInsuranceClassData($test);
+                   
+                      array_push($buslines, $busline);
+                       }
+                       return $buslines;
+                  }
+                  else
+                      return false;
+                  
+          } catch (Exception $exc) {
+              echo $exc->getTraceAsString();
+          }
+                   
+          
+      }
+      
+      public function disablebusline($buslineId,$status)
+      {
+          if (null == $buslineId || !is_int($buslineId)) {
+                    throw new Exception("Invalid argument exception in find country");
+          }
+          
+          
+          $buslineDao=new admin_Model_BuslineDao();
+          
+          $status=$buslineDao->changestatus($buslineId,$status);
+          return $status;
+      }
+      
+      public function deleteBuslines($buslineId)
+      {
+          if (null == $buslineId || !is_int($buslineId)) {
+               throw new Exception("Invalid argument exception in find country");
+          }
+        
+          $buslineDao=new admin_Model_BuslineDao();
+          $buslineDao->deletebusinessline($buslineId);
+         
+      }
+
+
+      public static function getJson(admin_Model_Busline $buslinedetails){
+        
+        $buslines = array();
+        $buslines['id'] = $buslinedetails->getId();
+        $buslines['LineName'] = $buslinedetails->getlineName();
+        $buslines['insuranceClass'] = $buslinedetails->getinsuranceClass();
+        $buslines['enabled']=$buslinedetails->getenabled();
+      
+        return Zend_Json::encode($buslines);
+    }
+    
+    public static function getJsonSearch(admin_Model_Busline $buslinedetails){
+         $buslines = array();
+        $buslines['id'] = $buslinedetails->getId();
+        $buslines['LineName'] = $buslinedetails->getlineName();
+        $buslines['insuranceClass'] = $buslinedetails->getInsurance();
+        $buslines['enabled']=$buslinedetails->getenabled();
+      
+        return Zend_Json::encode($buslines);
+    }
+           
+    
+    
+    
+ 
+}
+

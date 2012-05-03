@@ -1,0 +1,22 @@
+<?php
+
+class admin_Form_NewTutorialGroup extends Zend_Form
+{
+
+    public function init()
+    {
+       $baseUrl=  Zend_Controller_Front::getInstance()->getBaseUrl();
+       $this->setAction($baseUrl."/admin/Tutorials/savetutorialgroup");
+       $this->setMethod("post");
+       $this->setAttrib("id", "savetutorialgroup");
+       $this->setAttrib("class", "form");
+       
+       $tutorialGroup=new Zend_Form_Element_Text("tutorialgroup");
+       $tutorialGroup->setLabel("Group Name");
+       
+       $this->addElement($tutorialGroup);
+    }
+
+
+}
+

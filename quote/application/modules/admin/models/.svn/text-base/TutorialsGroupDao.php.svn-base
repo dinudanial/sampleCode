@@ -1,0 +1,116 @@
+<?php
+
+class admin_Model_TutorialsGroupDao extends Zend_Db_Table_Abstract {
+
+    protected $_name = 'TutorialsGroup';
+    protected $_primary = 'ID_TutorialsGroup';
+
+    public function save(array $groupDetails) {
+       try {
+            $result = $this->insert($groupDetails);
+            return (integer) $result;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        } 
+    }
+
+    public function edit(array $groupDtil) {
+        try {
+            $where['ID_TutorialsGroup = ?'] = $groupDtil['ID_TutorialsGroup'];
+            $result = $this->update($groupDtil, $where);
+            return (integer) $result;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function getGroups() {
+        try {
+            $select = $this->select();
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0)
+                return $rows;
+            else
+                return false;
+        } catch (Zend_Db_Table_Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function changeStatus($groupId, $status) {
+        try {
+            $data['d__IsActive'] = $status;
+            $where['ID_Tutorials = ?'] = $groupId;
+            $result = $this->update($data, $where);
+            return (integer) $result;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+    
+    public function getGroupNames()
+    {
+        try{
+            $select =$this->select()
+                          ->from($this,array('ID_TutorialsGroup','d__Name'));
+                        
+            $stmt=$select->query();
+            $rows=$stmt->fetchAll();
+           
+            if (count($rows) > 0){
+                foreach ($rows as $r){
+
+                    $result[$r['ID_TutorialsGroup']] = $r['d__Name'];
+                }
+                
+                return $result;
+                
+            }
+           else 
+               return false;
+        }
+        catch(Zend_Db_Table_Exception $e)
+        {
+                 $e->getMessage();          
+        }
+    }
+    
+    public function getGroupWithId($groupId)
+    {
+        try {
+             $select=  $this->select()
+                      ->from($this,array('d__Name'))
+                      ->where('ID_TutorialsGroup=?',$groupId);
+             
+             $stmt=$select->query();
+             $row=$stmt->fetch();
+             return $row['d__Name'];
+             
+             
+        } catch (Zend_Db_Table_Exception $exc) {
+            echo $exc->getMessage();
+        }
+    }
+    
+    public function checkNameInDb($name)
+    {
+        try {
+            $select=  $this->select()
+                   ->from($this,array('d__Name'))
+                   ->where('d__Name=?',$name);
+            $stmt=$select->query();
+            $row=$stmt->fetch();
+          
+            if($row)
+                return false;
+            else
+                return true;
+        } catch (Zend_Db_Table_Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+        }
+
+}
+
+?>

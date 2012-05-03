@@ -1,0 +1,103 @@
+<?php
+
+class admin_Form_CountryAdd extends Zend_Form
+{
+
+	
+    public function init()
+    {
+
+       //$this->setEnctype(Zend_Form::ENCTYPE_MULTIPART);
+       $this->setAttrib('enctype', 'multipart/form-data');
+       $baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+       $this->setAction($baseUrl.'/admin/countries/saveCountry');
+
+       $this->setAttrib('id', 'addCountry')  ;
+       $this->setAttrib('class', 'form');
+       $this->setMethod('post');
+                
+
+                
+        $name = new Zend_Form_Element_Text('name');
+        $name->setLabel('Name')
+                            ->setRequired(true)
+                            ->addFilter('StripTags')
+                            ->addFilter('StringTrim');
+                        //->setAttrib("class", "required");
+                //  ->addValidator('NotEmpty');
+                          
+        $autherised= new Zend_Form_Element_Select('autherised');
+        $autherised->setLabel('Autherised')
+              ->setMultiOptions(array(
+                  'select'=>'Select', 
+                  admin_Model_CountryAutherised::Forbidden=>'Forbidden', 
+                  admin_Model_CountryAutherised::Allowed=>'Allowed', 
+                  admin_Model_CountryAutherised::Tolerated=>'Tolerated'))
+              ->setRequired(true)->addValidator('NotEmpty', true);
+                
+        $sendingDataApplicable = new Zend_Form_Element_Checkbox('sendingDataApplicable'); 
+        $sendingDataApplicable->setLabel('Sending Data Applicable');
+            
+        $admittedType = new Zend_Form_Element_Radio('admitted_type');
+        $admittedType   ->setLabel('Admitted Type - "Yes" or "Yes / FOS')
+                        ->addMultiOptions(array(
+                            '0' => 'yes',
+                            '1' => 'Yes/FOS' 
+                        ))
+                        ->setSeparator('');
+                   
+        $defaultAdmitedEntry= new Zend_Form_Element_Select('defaultAdmittedEntry');
+        $defaultAdmitedEntry->setLabel('Default Admitted Entry')
+                            ->setAttribs(array("class" => "adminttedentryshow"))
+                            ->setMultiOptions(array('select'=>'select', 'Yes'=>'Yes', 'No'=>'No'));
+              
+                       
+        $defaultAdmitedEntry1= new Zend_Form_Element_Select('defaultAdmittedEntry1');
+        //$defaultAdmitedEntry1->setLabel('Default Admitted Entry')
+        $defaultAdmitedEntry1->setAttribs(array("class" => "adminttedentryhide"))
+              ->setMultiOptions(array('select'=>'select', 'No'=>'No', 'Yes/FOS'=>'Yes/FOS'));
+             
+              
+        $residenceDropDown = new Zend_Form_Element_Checkbox('residenceDropDown'); 
+        $residenceDropDown->setLabel('Residence Drop Down');  
+          
+        
+        $lockAdmitted = new Zend_Form_Element_Checkbox('lockAdmitted'); 
+        $lockAdmitted->setLabel('Lock Admitted');
+                              
+        
+        $lpan = new Zend_Form_Element_Checkbox('lpan'); 
+        $lpan->setLabel('LPAN');
+                             
+                             
+        $countryCommentary=new Zend_Form_Element_Textarea('countrycommentary');
+        $countryCommentary->setLabel('Country Commentary')
+        		  ->addFilter('StripTags')
+        		  ->addFilter('StringTrim')
+                           ->setAttrib('COLS', '20')
+                           ->setAttrib('ROWS', '3');
+        $hidden=new Zend_Form_Element_Hidden("countryid");
+        $filehidden=new Zend_Form_Element_Hidden("hidenFileId");
+        
+        $doc_file = new Zend_Form_Element_File('doc_path');
+		 $doc_file->setLabel('Upload File');
+                 
+        $filedescription=new Zend_Form_Element_Textarea('filedescription');
+        $filedescription->setLabel('File Description')
+        		  ->addFilter('StripTags')
+        		  ->addFilter('StringTrim')
+                  ->setAttrib('COLS', '20')
+                  ->setAttrib('ROWS', '3');
+        
+        
+        $this->addElements(array($name,$autherised,$sendingDataApplicable,$admittedType,$defaultAdmitedEntry,$defaultAdmitedEntry1,$residenceDropDown,$lockAdmitted,$lpan,$countryCommentary,$doc_file,$filedescription,$hidden,$filehidden));
+  
+        
+                
+    }
+    	
+    
+
+
+}
+

@@ -1,0 +1,41 @@
+<?php
+
+class admin_Form_NewBusline extends Zend_Form
+{
+
+    public function init()
+    {
+        $baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+        $this->setAction($baseUrl.'/admin/Buslines/savebusline');
+        $this->setMethod('post');
+        $this->setAttrib('id','saveBusline');
+        $this->setAttrib('class','form');
+        
+        $lineName=new Zend_Form_Element_Text('lineName');
+        $lineName->setLabel("Name");
+        
+     
+         
+        
+        $insuaranceClass= new Zend_Form_Element_Select('insuranceclassbusline');
+        $insurance=array();
+        $insurance=admin_Model_Util::getInsuranceClasses();
+        $insurance[0]="select";
+        ksort($insurance);
+       
+        $insuaranceClass->addMultiOptions($insurance);
+        $insuaranceClass->setLabel("InsuranceClass");
+        
+        
+        
+        $enabled=new Zend_Form_Element_Checkbox('enabled');
+        $enabled->setLabel('Enable');
+        $hidden=new Zend_Form_Element_Hidden("hiddenid");
+        
+        $this->addElements(array($lineName,$insuaranceClass,$enabled,$hidden));   
+        
+    }
+
+
+}
+

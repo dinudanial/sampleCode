@@ -1,0 +1,221 @@
+<?php
+
+/* Author                : Renesankar(rene@toobler.com)
+ * Company               : Toobler
+ * Email:                : info@toobler.com
+ * Web site              : http://www.toobler.com
+ * Created               : 27/02/2012
+ * Description       	 : 
+ * ==============================================================================================
+ * Change History:
+ * ----------------------------------------------------------------------------------------------
+ * Sl.No.  Date   Author   Description
+ * ----------------------------------------------------------------------------------------------
+ * 	1
+ *
+ *
+ * ----------------------------------------------------------------------------------------------
+ *
+ */
+
+class admin_Model_Country {
+
+    private $country;
+    private $id;
+    private $authorised;
+    private $standingDataApplicable;
+    private $admittedType;
+    private $admittedEntry;
+    private $residencePullDown;
+    private $lockAdmitted;
+    private $lpan;
+    private $commentary;
+    private $region;
+
+    public function getCountry() {
+        return $this->country;
+    }
+
+    public function setCountry($country) {
+        if (!is_string($country)) {
+            throw new Exception("Invalid argument exception in setCountry");
+        }
+        $this->country = $country;
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        if (!is_int($id)) {
+            throw new Exception("Invalid argument exception in setId");
+        }
+        $this->id = $id;
+    }
+
+    public function getAuthorised() {
+        return $this->authorised;
+    }
+
+    public function setAuthorised($authorised) {
+        $this->authorised = $authorised;
+    }
+
+    public function getStandingDataApplicable() {
+        return $this->standingDataApplicable;
+    }
+
+    public function setStandingDataApplicable($standingDataApplicable) {
+        if (!is_bool($standingDataApplicable)) {
+            throw new Exception("Invalid argument exception in setStandingDataApplicable");
+        }
+        $this->standingDataApplicable = $standingDataApplicable;
+    }
+
+    public function getAdmittedType() {
+        return $this->admittedType;
+    }
+
+    public function setAdmittedType($admittedType) {
+        $this->admittedType = $admittedType;
+    }
+
+    public function getAdmittedEntry() {
+        return $this->admittedEntry;
+    }
+
+    public function setAdmittedEntry($admittedEntry) {
+        $this->admittedEntry = $admittedEntry;
+    }
+
+    public function getResidencePullDown() {
+        return $this->residencePullDown;
+    }
+
+    public function setResidencePullDown($residencePullDown) {
+        if (!is_bool($residencePullDown)) {
+            throw new Exception("Invalid argument exception in setResidencePullDown");
+        }
+        $this->residencePullDown = $residencePullDown;
+    }
+
+    public function getLockAdmitted() {
+        return $this->lockAdmitted;
+    }
+
+    public function setLockAdmitted($lockAdmitted) {
+        if (!is_bool($lockAdmitted)) {
+            throw new Exception("Invalid argument exception in setLockAdmitted");
+        }
+        $this->lockAdmitted = $lockAdmitted;
+    }
+
+    public function getLpan() {
+        return $this->lpan;
+    }
+
+    public function setLpan($lpan) {
+        if (!is_bool($lpan)) {
+            throw new Exception("Invalid argument exception in setLpan");
+        }
+        $this->lpan = $lpan;
+    }
+
+    public function getCommentary() {
+        return $this->commentary;
+    }
+
+    public function setCommentary($commentary) {
+        $this->commentary = $commentary;
+    }
+
+    public function getRegion() {
+        return $this->region;
+    }
+
+    public function setRegion($region) {
+        if (!is_int($region)) {
+            throw new Exception("Invalid argument exception in setRegion");
+        }
+        $this->region = $region;
+    }
+
+    /**
+     * Save selected country details.
+     * @param type $country
+     * @return boolean
+     * @throws Exception 
+     */
+    public function save(admin_Model_Country $country) {
+    	$result['status']	=	false;
+        if (null == $country) {
+            throw new Exception("Invalid argument exception in save country");
+        }
+        try{
+        	$countryDao	= new admin_Model_CountryDao();
+        	$result	=	$countryDao->save($country);
+        	return $result;
+        }catch (Exception $exc) {
+            throw new Exception($exc->getMessage());
+        }
+    }
+
+    /**
+     * Select country details for given country id.
+     * @param type $countryId
+     * @return \admin_Model_Country
+     * @throws Exception 
+     */
+    public function find($countryId) {
+       
+        if (null == $countryId || !is_int($countryId)) {
+            throw new Exception("Invalid argument exception in find country");
+        }
+        try {
+            $cd = new admin_Model_CountryDao();
+            $c = $cd->getCountry($countryId); 
+            $country = new admin_Model_Country();
+            $country->setId((integer) $c['ID_Country']);
+            $country->setCountry($c['d__CountryName']);
+            $country->setStandingDataApplicable((boolean)$c['d__Applicable_StandingData']);
+            $country->setRegion((integer)$c['ID_Region']);
+            $country->setCommentary($c['d__Commentary']);
+            $country->setAdmittedType($c['d__Applicable_Admitted']);
+            $country->setAdmittedEntry($c['d__Admitted']);
+            $country->setAuthorised($c['d__Authorised']);
+            $country->setLockAdmitted((boolean) $c['d__LockAdmitted']);
+            $country->setResidencePullDown((boolean) $c['d__ResidencePullDown']);
+            $country->setLpan((boolean) $c['d__LPAN']);
+            $country->setCommentary($c['d__Commentary']);
+          
+            return $country;
+        } catch (Exception $exc) {
+            throw new Exception($exc->getMessage());
+        }
+    }
+    /**
+     * Converts country object to json.
+     * @param admin_Model_Country $c
+     * @return json 
+     */
+    public static function getJson(admin_Model_Country $c){
+        
+        $country = array();
+        $country['id'] = $c->getId();
+        $country['country'] = $c->getCountry();
+        $country['commentary'] = $c->getCommentary();
+        $country['admittedEntry'] = $c->getAdmittedEntry();
+        $country['admittedType'] = $c->getAdmittedType();
+        $country['authorised'] = $c->getAuthorised();
+        $country['lockAdmitted'] = $c->getLockAdmitted();
+        $country['LPAN'] = $c->getLpan();
+        $country['region'] = $c->getRegion();
+        $country['residencePullDown'] = $c->getResidencePullDown();
+        $country['standingDataApplicable'] = $c->getStandingDataApplicable();
+        $country['countryCommentary']=$c->getCommentary();
+        return Zend_Json::encode($country);
+    }
+
+}
+

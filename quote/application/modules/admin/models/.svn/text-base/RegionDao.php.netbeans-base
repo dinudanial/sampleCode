@@ -1,0 +1,47 @@
+<?php
+
+class admin_Model_RegionDao extends Zend_Db_Table_Abstract {
+
+    protected $_name = 'Region';
+    protected $_primary = 'ID_Region';
+
+    public function getRegions() {
+        try {
+            $select = $this->select()
+                    ->order('d__RegionOrder asc');
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0)
+                return $rows;
+            else
+                return false;
+        } catch (Zend_Db_Table_Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
+    public function getRegionName()
+    {
+        try{
+            $select =$this->select()
+                          ->from($this,array('ID_Region','d__RegionName'))
+                          ->order('d__RegionOrder asc');
+            $stmt=$select->query();
+            $rows=$stmt->fetchAll();
+            if(count($rows)>0)
+               return $rows;
+           else 
+               return false;
+        }
+        catch(Zend_Db_Table_Exception $e)
+        {
+                 $e->getMessage();          
+        }
+    }
+    
+    
+    
+   
+
+}
+

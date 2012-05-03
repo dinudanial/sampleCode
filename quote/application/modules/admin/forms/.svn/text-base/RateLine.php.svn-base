@@ -1,0 +1,326 @@
+<?php
+class admin_Form_RateLine extends Zend_Form
+{
+    public $elementDecorators = array(
+        'ViewHelper',
+        'Errors',
+        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
+        array('Label', array('tag' => 'td')),
+        array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
+    );
+    
+    public $elementBetween = array(
+        'ViewHelper',
+        'Errors',
+        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
+        array('Label', array('tag' => 'span')),
+    );
+    public $elementAbove = array(
+        'ViewHelper',
+        'Errors',
+        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
+       array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
+    );
+    
+    public $elementDecorators1 = array(
+        'ViewHelper',
+        'Errors',
+        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element',"colspan"=>"2")),
+        array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
+    );
+
+    public $buttonDecorators = array(
+        'ViewHelper',
+        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
+        array(array('label' => 'HtmlTag'), array('tag' => 'td', 'placement' => 'prepend')),
+        array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
+    );
+
+    public function init()
+    {
+    	$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+        $this->setAction($baseUrl.'/admin/Rateline/save');
+        $this->setMethod('post');
+        $this->setAttrib('id','rateLine');
+                
+        $this->addElement('text', 'rateLineId', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Rate Line ID',
+        	'value'      => 'new',
+            'readonly'       => 'readonly',
+        ));
+        $this->addElement('text', 'startDate', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Start Date',
+            'readonly'       => 'readonly',
+            'value'      => date('m/d/Y'),
+            'required' => true,
+        ));
+        $this->addElement('text', 'endDate', array(
+            'decorators' => $this->elementDecorators,
+            'readonly'       => 'readonly',
+            'label'       => 'End Date',
+        ));
+        $basisOfCalculationData = admin_Model_Util::getBasisOfCalculation();
+        $this->addElement('select', 'basisofCalculation', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Basis of Calculation',
+            'multiOptions'=> $basisOfCalculationData,
+            'required' => true,
+        ));
+        $this->addElement('text', 'd__MaltaStampDuty_Premium_Level1', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Premium is less than €',
+        ));
+         $this->addElement('text', 'd__MaltaStampDuty_Premium_Level1_Rate', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'tax is',
+        ));
+         $this->addElement('text', 'd__MaltaStampDuty_Premium_Level2', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Premium is between €',
+        ));
+        $this->addElement('text', 'd__MaltaStampDuty_Premium_Level3', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'and €',
+        ));
+        $this->addElement('text', 'd__MaltaStampDuty_Premium_Level2_Rate', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'tax is €',
+        ));
+        $this->addElement('text', 'd__MaltaStampDuty_Premium_Level3_Rate', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Premium is greater than €- tax is ',
+        ));
+        $this->addElement('text', 'd__AmountPerX', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'The lesser of DKK',
+        ));
+         $this->addElement('text', 'd__AmountPerXValue', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'per $DKK',
+        ));
+         $this->addElement('text', 'd__NonFireElementRate', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Non Fire Element Rate:',
+        ));
+        $this->addElement('text', 'd__DomesticTransportationElement', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Domestic Transportation Element:',
+        ));
+        $this->addElement('text', 'admittedRate', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Admitted Rate',
+            'required' => true,
+        ));
+         $this->addElement('text', 'notAdmittedRate', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Not Admitted Rate',
+            'required' => true,
+        ));
+         $this->addElement('text', 'minimumValueApplies', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Minimum value applies(XAF)',
+        ));
+         $this->addElement('text', 'maximumValueApplies', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Maximum value applies(XAF)',
+        ));
+        $this->addElement('text', 'additionalRateId', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Additional Rate ID(s)',
+        ));
+        $this->addElement('checkbox', 'insuranceResidenceApplicable', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Insured Residence Applicable',
+        ));
+        $this->addElement('checkbox', 'deminimisApplicable', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'De-Minimis Applicable',
+        ));
+        $this->addElement('text', 'd__DeMinimis_TotalPremiumThreshold"', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Total Premium Threshold',
+        ));
+        $this->addElement('text', 'd__DeMinimis_PremiumAllocationThreshold', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Premium Allocation Threshold',
+        ));
+        $this->addElement('checkbox', 'calculateInsurLineasGroup', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Calculate Multi-Insurer Lines as Group',
+        ));
+         $this->addElement('checkbox', 'layering', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Layering',
+        ));
+        $this->addElement('button', 'editLayerButton', array(
+            'decorators' => $this->buttonDecorators,
+            'label'       => 'edit',
+        ));
+        $this->addElement('checkbox', 'layeringPercentage', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Layering %',
+        ));
+        $this->addElement('button', 'editLayerPercentageButton', array(
+            'decorators' => $this->buttonDecorators,
+            'label'       => 'edit',
+        ));
+        $this->addElement('text', 'between1', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Between',
+        ));
+        $this->addElement('text', 'rateabove1', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Rate above',
+        ));
+         $this->addElement('text', 'between2', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Between',
+        ));
+         $this->addElement('text', 'rateabove2', array(
+            'decorators' => $this->elementDecorators,
+         	'label'       => 'Rate above',
+        ));
+         $this->addElement('text', 'between3', array(
+            'decorators' => $this->elementDecorators,
+         	'label'       => 'Between',
+        ));
+         $this->addElement('text', 'rateabove3', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Rate above',
+        ));
+         $this->addElement('text', 'band2Admitted', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Band 2 Admitted',
+        ));
+        $this->addElement('text', 'band2notAdmitted', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Band 2 Not Admitted',
+        ));
+         $this->addElement('text', 'band3Admitted', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Band 3 Admitted',
+        ));
+        $this->addElement('text', 'band3notAdmitted', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Band 3 Not Admitted',
+        ));
+         $this->addElement('checkbox', 'applybandproportionality', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Apply Bands Proportionately',
+        ));
+        $this->addElement('radio', 'admitted', array(
+            'decorators' => $this->elementDecorators1,
+            'disableLoadDefaultDecorators' => true,
+       		'multiOptions'=>array(
+       			"1"=>"1) Taxes Payable by the Insured and Administered by Insurers",
+       			"2"=>"2) Taxes Payable by Insurers and Administered by Insured or their Agent",
+       			"3"=>"3) Taxes Payable by Insurers",
+       			"4"=>"4) Taxes Payable by Insured or their Agent Locally",
+       		  ),
+        ));
+        
+        $this->addElement('radio', 'notAdmitted', array(
+            'decorators' => $this->elementDecorators1,
+            'disableLoadDefaultDecorators' => true,
+       		'multiOptions'=>array(
+       			"1"=>"1) Taxes Payable by the Insured and Administered by Insurers",
+       			"2"=>"2) Taxes Payable by Insurers and Administered by Insured or their Agent",
+       			"3"=>"3) Taxes Payable by Insurers",
+       			"4"=>"4) Taxes Payable by Insured or their Agent Locally",
+       		  ),
+        ));
+        
+        $this->addElement('text', 'Multiplier1name', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Multiplier1',
+        ));
+        $this->addElement('text', 'Multiplier1admitted', array(
+            'decorators' => $this->elementDecorators,
+        ));
+         $this->addElement('text', 'Multiplier1notadmitted', array(
+            'decorators' => $this->elementDecorators,
+        ));
+         $this->addElement('text', 'Multiplier2name', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Multiplier2',
+        ));
+        $this->addElement('text', 'Multiplier2admitted', array(
+            'decorators' => $this->elementDecorators,
+        ));
+         $this->addElement('text', 'Multiplier2notadmitted', array(
+            'decorators' => $this->elementDecorators,
+        ));
+        $this->addElement('text', 'Multiplier3name', array(
+            'decorators' => $this->elementDecorators,
+            'label'       => 'Multiplier3',
+        ));
+        $this->addElement('text', 'Multiplier3admitted', array(
+            'decorators' => $this->elementDecorators,
+        ));
+         $this->addElement('text', 'Multiplier3notadmitted', array(
+            'decorators' => $this->elementDecorators,
+        ));
+         
+         $masterID = new Zend_Form_Element_Hidden ('MasterRateId');
+         $masterID->setDecorators(array('ViewHelper'));
+
+         
+         $countryid = new Zend_Form_Element_Hidden ('CountryId');
+         $countryid->setDecorators(array('ViewHelper'));
+
+         
+         $regionId = new Zend_Form_Element_Hidden ('RegionId');
+         $regionId->setDecorators(array('ViewHelper'));
+
+         
+         $currency = new Zend_Form_Element_Hidden ('Currency');
+         $currency->setDecorators(array('ViewHelper'));
+
+         
+         $this->addElements(array($masterID,$countryid,$regionId,$currency));
+         
+
+         
+//         $this->addElement('hidden', 'MasterRateId', array(
+//            
+//        ));
+//         $this->addElement('hidden', 'CountryId', array(
+//            
+//        ));
+//        $this->addElement('hidden', 'RegionId', array(
+//            
+//        ));
+//        $this->addElement('hidden', 'Currency', array(
+//            
+//        ));
+        
+        /* $this->addDisplayGroup(array(
+        
+                    'Multiplier1name',
+                    'Multiplier1admitted',
+         			'Multiplier1notadmitted',
+         			'Multiplier2name',
+         			'Multiplier2admitted',
+         			'Multiplier2notadmitted',
+         			'Multiplier3name',
+         			'Multiplier3admitted',
+         			'Multiplier3notadmitted',
+        
+        ),'multiplier',array('legend' => 'Multipliers'));
+        
+        $pass = $this->getDisplayGroup('multiplier');*/
+    }
+
+    public function loadDefaultDecorators()
+    {
+        $this->setDecorators(array(
+            'FormElements',
+            array('HtmlTag', array('tag' => 'table')),
+            'Form',
+        ));
+    }
+			      
+}
+?>

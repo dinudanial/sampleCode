@@ -1,0 +1,58 @@
+Country
+------------
+1. d__Admitted--->Default Admitted Entry
+2. d__Applicable_Admitted--->Admitted Type - "Yes" or "Yes / FOS"
+3. d__ResidencePullDown--->Residence drop-down
+4. d__LockAdmitted--->Lock Admitted
+5. d__LPAN-->LPAN
+6. d__Commentary--->Country Commentary'
+
+d__Flag_IsSwitzerland?
+s__SQLTimestamp?
+s__CountRates?
+
+File filed is not given in mysql.
+
+
+Currency
+--------------
+1. Base Currency--->d__BaseRate
+
+ID_Solution?
+
+
+Rate/RateMaster
+----------------
+1. d__TypeOfTax--->Type of Tax
+2. ID_Region-->Region
+3. d__DefaultSubClass-->Default Subclass / Tertiary
+4. s__Enabled-->Enabled
+
+d__InsuredResidenceApplicable?
+d__ObsoleteRatec?
+s__UpdateCopyToServer?
+s__CreationTimestamp?
+s__SQLTimestamp?
+u__InsuranceClass?
+u__Country?
+u__Region?
+s__CurrentRateLines?
+s__DataIssue?
+s__IDRate_DefaultGroup?
+
+
+System
+----------
+1. Added d__SystemLogoutTime.
+2. s__Count_ActiveUsers?
+
+News
+-----
+Checked. Ok.
+
+
+
+
+
+
+

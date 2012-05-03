@@ -1,0 +1,143 @@
+<?php
+
+class admin_Model_CountryDao extends Zend_Db_Table_Abstract {
+
+    protected $_name = 'Country';
+    protected $_primary = 'ID_Country';
+
+    public function getAllCountries() {
+        $select = $this->select();
+
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll();
+        if (count($rows) > 0)
+            return $rows;
+        else
+            return false;
+    }
+
+    /**
+     *  Update Country name .
+     *  @author Anoop A
+     * @param $country object
+     * @return update message
+     * @throws Exception 
+     */
+
+    public function save(admin_Model_Country $country) {
+        $msg = "";
+        try {
+            $status = false;
+            if (null == $country) {
+                throw new Exception("Invalid argument exception in save country");
+            } else {
+                $result = $this->checkCountry($country->getCountry(), $country->getId());
+                if (!$result) {
+                    $data = array('d__CountryName' => $country->getCountry(),
+                        'd__Authorised' => $country->getAuthorised(),
+                        'd__Applicable_StandingData' => $country->getStandingDataApplicable(),
+                        'd__Admitted' => $this->getDefaultAdapter()->quote($country->getAdmittedEntry()),
+                        'd__Applicable_Admitted' => $country->getAdmittedType(),
+                        'd__ResidencePullDown' => $country->getResidencePullDown(),
+                        'd__LockAdmitted' => $country->getLockAdmitted(),
+                        'd__LPAN' => $country->getLpan(),
+                        'd__Commentary' => $country->getCommentary()
+                    );
+
+                    $where['ID_Country = ?'] = $country->getId();
+                    $this->update($data, $where);
+                    $msg = array("msg" => "Successfully updated!", "status" => $status = true);
+                    return $msg;
+                } else {
+                    $msg = array("msg" => "Country name already exists!", "status" => true);
+                    return $msg;
+                }
+            }
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * Check country is already exists or not .
+     * @author Anoop A
+     * @param type $country ,$countryId
+     * @return true or false
+     * @throws Exception 
+     */
+    public function checkCountry($country, $countryId) {
+        if (null == $country || null == $countryId || !is_int($countryId)) {
+            throw new Exception("Invalid argument exception in check country");
+        } else {
+            $select = $this->select();
+            $select->where('d__CountryName= ?', $country)
+                    ->where('ID_Country!= ?', $countryId);
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0)
+                return true;
+            else
+                return false;
+        }
+    }
+
+    public function getCountries($regionId) {
+        try {
+            $select = $this->select()
+                    ->from($this, array('ID_Country', 'd__CountryName', 'd__Admitted', 'd__Applicable_Admitted'
+                        , 'd__Applicable_StandingData', 'd__Authorised', 'd__Commentary', 'd__LockAdmitted',
+                        'd__ResidencePullDown', 'd__Flag_IsSwitzerland', 'd__LPAN', 's__CountRates'))
+                    ->where('ID_Region = ?', $regionId);
+
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll();
+
+            if (count($rows) > 0) {
+
+                return $rows;
+            } else {
+                return false;
+            }
+        } catch (Zend_Db_Table_Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function getCountry($countryId) {
+        try {
+            $select = $this->select()
+                    ->from($this, array('ID_Country', 'd__CountryName', 'd__Admitted', 'd__Applicable_Admitted'
+                        , 'd__Applicable_StandingData', 'd__Authorised', 'd__Commentary', 'd__LockAdmitted',
+                        'd__ResidencePullDown', 'd__Flag_IsSwitzerland', 'd__LPAN', 'ID_Region', 's__CountRates'))
+                    ->where('ID_Country = ?', $countryId);
+            $stmt = $select->query();
+            $row = $stmt->fetch();
+            if ($row)
+                return $row;
+            else
+                return false;
+        } catch (Zend_Db_Table_Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function getCountrydata($regionId) {
+        try {
+            $select = $this->select()
+                    ->from($this, array('ID_Country', 'd__CountryName'))
+                    ->where('ID_Region=?', $regionId);
+            $stmt = $select->query();
+            $row = $stmt->fetchall();
+            if ($row)
+                return $row;
+            else
+                return false;
+        } catch (Zend_Db_Table_Exception $e) {
+
+            echo $e->getMessae();
+        }
+    }
+
+}
+
+// class close

@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/ipt-quote.2/!svn/ver/273/trunk/tests
+END
+phpunit.xml
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/ipt-quote.2/!svn/ver/12/trunk/tests/phpunit.xml
+END

@@ -1,0 +1,174 @@
+<?php
+/* Author                : Anoop A(anoop@toobler.com)
+ * Company               : Toobler
+ * Email:                : info@toobler.com
+ * Web site              : http://www.toobler.com
+ * Created               : 10/03/2012
+ * Description       	 : 
+ * ==============================================================================================
+ * Change History:
+ * ----------------------------------------------------------------------------------------------
+ * Sl.No.  Date   Author   Description
+ * ----------------------------------------------------------------------------------------------
+ * 	1
+ *
+ *
+ * ----------------------------------------------------------------------------------------------
+ *
+ */
+class admin_Model_Webnews {
+    private $content;
+    private $id;
+    private $headline;
+    private $creationaccount;
+    private $modificationaccount;
+    private $date;
+
+    public function getContent() {
+        return $this->content;
+    }
+
+    public function setContent($content) {
+        if (!is_string($content)) {
+            throw new Exception("Invalid argument exception in setCountry");
+        }
+        $this->content = $content;
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        if (!is_int($id)) {
+            throw new Exception("Invalid argument exception in setId");
+        }
+        $this->id = $id;
+    }
+ 	public function getHeadLine() {
+        return $this->headline;
+    }
+
+    public function setHeadLine($headline) {
+        if (!is_string($headline)) {
+            throw new Exception("Invalid argument exception in setCountry");
+        }
+        $this->headline = $headline;
+    }
+	public function getDate() {
+        return $this->date;
+    }
+
+    public function setDate($date) {
+        $this->date = $date;
+    }
+    
+    public function getWebnews(){
+    	try{
+	    	$webnews = new admin_Model_WebnewsDao();
+	    	$webnewsData = $webnews->getNews();
+	    	if($webnewsData){
+	    		$newsList = array();
+	    		foreach ($webnewsData as $news) {
+	    			$webnews = new admin_Model_Webnews();
+	    			$webnews->setId((integer)$news['ID_News']);
+	    			$webnews->setContent($news['d__Content']);	    			
+	    			$webnews->setHeadLine($news['d__Headline']);
+	    			$webnews->setDate($news['d__Date']);
+	    			array_push($newsList, $webnews);
+	    		}
+	    		return $newsList;
+	    	}
+	    	else{
+	    		return $newsList;
+	    		//throw new Exception("Empty data set!");
+	    	}
+    	}catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
+ 	public function save(admin_Model_Webnews $news) {
+        if (null == $news) {
+            throw new Exception('Invalid argument exception in save!');
+        }
+        try {
+            $newsDetails = array();
+            $status = false;
+            $newsDao = new admin_Model_WebnewsDao();
+            $newsDetails['d__Content'] = $news->getContent();
+            $newsDetails['d__Headline'] = $news->getHeadLine();
+            $newsDetails['d__Date'] = $news->getDate();
+            if ($news->getId()) {
+                $newsDetails['ID_News'] = $news->getId();
+                	$status = $newsDao->editNews($newsDetails);
+            } else {
+                $status = $newsDao->saveNews($newsDetails);
+            }      
+            return $status;         
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
+    public function getWebnewsDetails($newsId){
+    	if (!$newsId || !is_int($newsId)) {
+	         throw new Exception("Invalid argument exception in edit Web News!");
+	    }
+	    try{
+	    	$news = new admin_Model_WebnewsDao();
+	    	$newsDetails = $news->findNews($newsId);
+	    	if(!empty($newsDetails)){
+	    		$webnews = new admin_Model_Webnews();
+	    		foreach ($newsDetails as $news){
+	    			$webnews->setId((integer)$news['ID_News']);
+	    			$webnews->setContent($news['d__Content']);	    			
+	    			$webnews->setHeadLine($news['d__Headline']);
+	    			$webnews->setDate($news['d__Date']);	           
+	    		}
+	            return $webnews;
+	    	}else{
+	    		throw new Exception("Empty data set!");
+	    	}
+	    }catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
+    public function deleteNews($newsId){
+    	if (!$newsId || !is_int($newsId)) {
+	         throw new Exception("Invalid argument exception in delete Web News!");
+	    }
+	    try{
+	    	$news = new admin_Model_WebnewsDao();
+	    	$delete = $news->deleteNews($newsId);
+	    	return $delete;
+	    }catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    public function isExists(admin_Model_Webnews $news){
+    	if (null == $news) {
+            throw new Exception('Invalid argument exception in save!');
+        }
+        try{
+        	$newsDao = new admin_Model_WebnewsDao();
+    	    $result = $newsDao->isExists();
+        }catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    	
+    }
+    
+	public static function getJson(admin_Model_Webnews $n){
+	        $news = array();
+	        $news['id'] = $n->getId();
+	        $news['content'] = $n->getContent();
+	        $news['headline'] = $n->getHeadLine();
+	        $news['date'] = date('d/m/Y', strtotime($n->getDate()));
+	        return Zend_Json::encode($news);
+	    }
+    
+}
+
+?>

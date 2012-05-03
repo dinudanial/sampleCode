@@ -1,0 +1,91 @@
+<?php
+
+class admin_Model_RateDao extends Zend_Db_Table_Abstract {
+
+    protected $_name = 'RateMaster';
+    protected $_primary = 'ID_RateMaster';
+
+    public function getRates(array $filter) {
+        try {
+            $select = $this->select()
+                    ->from($this, array('ID_RateMaster', 'ID_InsuranceClass',
+                        'ID_Currency', 'ID_Country', 'd__ObsoleteRatec',
+                        'd__InsuredResidenceApplicable', 'd__DefaultSubClass',
+                        's__CreationAccount', 'd__TypeOfTax','d__TertiaryClass', 
+                        'd__TaxSubClass', 'd__NoAutoCreate','s__CreationTimestamp'
+                        ))
+                 
+                    -> join('Country', 'Country.ID_Country = RateMaster.ID_Country', array('Country.d__CountryName'))
+             		-> join('InsuranceClass', 'InsuranceClass.ID_InsuranceClass = RateMaster.ID_InsuranceClass', array('InsuranceClass.d__InsuranceClass'))
+             		->setIntegrityCheck(false)
+                    ->where('RateMaster.ID_Country = ?', $filter['country']);
+         	if (isset($filter['insuranceClass']) && !empty($filter['insuranceClass'])) {
+                $select->where('RateMaster.ID_InsuranceClass = ?', $filter['insuranceClass']);
+            }
+            if (isset($filter['dataIssue']) && !empty($filter['dataIssue'])) {
+                $select->where('RateMaster.s__DataIssue = ?', $filter['dataIssue']);
+            }
+            if (isset($filter['rateId']) && !empty($filter['rateId'])) {
+                $select->where('RateMaster.ID_RateMaster = ?', $filter['rateId']);
+            }
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0){
+                return $rows;
+            }
+            else
+                return false;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function saveRate(array $rateDetails) {
+        try {
+            $result = $this->insert($rateDetails);
+            return true;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function editRate(array $rateDetails) {
+        try {
+        	//echo "<pre>";
+            //print_r($rateDetails);exit;
+            $where['ID_RateMaster = ?'] = $rateDetails['ID_RateMaster'];
+            $this->update($rateDetails,$where);
+            return true;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+    
+    public function findRate($rateId){
+    	try{
+    		$select	= $this->select()
+    				->from($this, array('ID_RateMaster', 'ID_InsuranceClass',
+                        'ID_Currency', 'ID_Country', 'd__ObsoleteRatec',
+                        'd__InsuredResidenceApplicable', 'd__DefaultSubClass',
+                        's__CreationAccount', 'd__TypeOfTax','d__TertiaryClass', 
+                        'd__TaxSubClass', 'd__NoAutoCreate','s__CreationTimestamp'
+                        ))
+    				-> join('Country', 'Country.ID_Country = RateMaster.ID_Country', array('Country.d__CountryName','Country.ID_Region'))
+             		-> join('InsuranceClass', 'InsuranceClass.ID_InsuranceClass = RateMaster.ID_InsuranceClass', array('InsuranceClass.d__InsuranceClass'))
+             		->setIntegrityCheck(false)
+    				->where('RateMaster.ID_RateMaster = ?', $rateId);
+    		$stmt = $select->query();
+    		//echo $select;exit;
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0){
+                return $rows;
+            }
+            else
+                return false;
+    	}catch(Zend_Db_Table_Exception $ex){
+    		throw new Exception($ex->getMessage());
+    	}
+    }
+
+}
+

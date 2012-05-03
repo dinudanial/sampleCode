@@ -1,0 +1,203 @@
+<?php
+include_once 'IptController.php';
+class Admin_CurrencyController extends admin_IptController 
+{
+
+    public function indexAction()
+    {
+        $form=new admin_Form_NewCurrency();
+        $this->view->form=$form;
+        
+        $currencies=new admin_Model_Currency();
+        $currencyList=$currencies->getAllCurrencies();
+        //$currencyList=  $this->getRates();
+        
+        $arr = array('currencies'=> $currencyList);
+        $this->view->assign($arr);
+
+       // $status=$this->getRequest()->getParam('status');
+
+    }
+    
+    public function savecurrencyAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $form=new admin_Form_NewCurrency();
+        if($this->_request->isPost())
+        {
+            $formData=  $this->_request->getPost();
+            if($form->isValid($formData))
+            {     
+                  
+                    $currency=new admin_Model_Currency();
+                    $currency->setCurrencyName($formData['currencyname']);
+                    $currency->setCurrencyCode($formData['currencycode']);
+                    $currency->setCurrencySymbol($formData['symbol']);
+                    $currency->setCurrencySymbolHTML($formData['currencycode']);
+                    $currency->setPaddingCharecter($formData['paddingcharacter']);
+                    $currency->setSymbolPossition($formData['symbolposition']);
+                    $currency->setBaseRate($formData['basecurrency']);
+                    $currency->setPriority($formData['priority']);
+                    $currency->saveCurrency($currency);
+                    $this->_redirect("/admin/Currency");          
+             }
+         }
+           
+    }
+   
+    
+    public function editcurrencyAction()
+    {
+            $this->_helper->viewRenderer->setNoRender(true);
+           
+            if($this->_request->isPost())
+            {
+               $formData=  $this->_request->getPost();
+               
+                    $currency=new admin_Model_Currency();
+                    $currency->setCurrencyId((integer)$formData['cid']);
+                    $currency->setCurrencyName($formData['name']);
+                    $currency->setCurrencyCode($formData['code']);
+                    $currency->setCurrencySymbol($formData['symboledit']);
+                    $currency->setCurrencySymbolHTML($formData['htmlsymbol']);
+                    $currency->setPaddingCharecter($formData['characterpadding']);
+                    $currency->setSymbolPossition($formData['positionsymboledit']);
+                    $currency->setBaseRate($formData['currencybase']);
+                    $currency->setPriority($formData['prior']);
+                    $currency->editCurrency($currency);
+                    $this->_redirect("/admin/Currency");  
+             
+            }
+    }
+
+    public function getcurrencydetailsAction()
+    {
+         $this->_helper->viewRenderer->setNoRender(true);
+          if ($this->_request->isPost()) {
+              
+               $rates=$this->getRates();
+              // echo '<pre>';
+              // print_r($rates);exit;
+             /*  $symbol=array();
+               $i=0;
+               foreach($rates as $r)
+               {
+                   $symbol[$i]=$r->csymbol;
+                   $i++;
+               }*/
+               
+               
+               
+               $currency=new admin_Model_Currency();
+               $allCurrencies=$currency->getAllCurrencies();
+                echo '<pre>';
+               print_r($allCurrencies);exit;
+               
+              
+               $currencyname=array();
+               $i=0;
+               foreach($allCurrencies as $c)
+               {
+                   $currencyname[$i]=$c->getCurrencyName();
+                  
+                   $i++;
+               }
+               
+               
+              
+               $currencyId=$this->getRequest()->getPost('currencyId');
+               $currencies=$currency->geCurrenciesById((integer)$currencyId);
+               
+               
+               
+               $json= admin_Model_Currency::getJson($currencies,$currencyname);
+               echo $json;
+               exit;
+          }
+    }
+    
+    public function deletecurrencyAction()
+    {
+       
+         $this->_helper->viewRenderer->setNoRender(true);
+          if ($this->_request->isPost()) {
+                $currencyId=$this->getRequest()->getPost('currencyId');
+                $currency=new admin_Model_Currency();
+                $currency->deleteCurrency((integer)$currencyId);
+          }
+    }
+    
+    public function getRates()
+    {
+       //$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+       $current = getcwd();
+       
+       $url = getcwd()."/xml/exchangerate.xml";
+	$xml = $this->readPage($url);
+       
+        return $xml;
+
+    }
+    
+    
+function readPage($address)
+{
+    
+        if (file_exists($address)) {
+              $xml = simplexml_load_file($address);
+              $r=array();
+                 foreach ($xml->currency as $currencyInfo):
+                      $rateArray=array();
+                      $rateArray=$currencyInfo;
+                      array_push($r, $rateArray);
+                 endforeach;
+   
+	return $r  ;
+        } else {
+              exit('Failed to open test.xml.');
+        }
+	
+
+       
+}
+
+public function exchangerateAction(){
+     $this->_helper->viewRenderer->setNoRender(true);
+     $currency=new admin_Model_Currency();
+     $allCurrencies=$currency->getAllCurrencies();
+     echo '<pre>';
+     $symbolArray = '';
+     $currencyIdArray = '';
+     foreach($allCurrencies as $currency){ 
+         $symbolArray[] = $currency->getCurrencyCode();
+         $currencyIdArray[] = $currency->getCurrencyId();
+     }
+     echo "Symbol".count($symbolArray);
+     //print_r($allCurrencies);exit;
+     $rateArray = '';
+     $rates=$this->getRates();
+     echo "rate".count($rates);
+     foreach($rates as $rate1){
+        $sampleArray = array();
+        foreach($rates as $rate2){          
+            if($rate1->csymbol!=$rate2->csymbol){
+                $keyValue = array_search($rate2->csymbol,$symbolArray);
+                if($keyValue){
+                    $sampleArray[] = array($currencyIdArray[$keyValue]=>(float)$rate2->crate/(float)$rate1->crate);
+                }
+            }
+        }
+        $keyValue1 = array_search($rate1->csymbol,$symbolArray);
+        if($keyValue1)
+            $rateArray[$currencyIdArray[$keyValue1]] = $sampleArray;
+      }
+       
+    
+     echo "<pre>";
+     print_r($rateArray);
+     echo count($rateArray);
+     exit; 
+}
+
+}
+

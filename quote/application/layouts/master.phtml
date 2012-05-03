@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>TMF</title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl("/css/style.css"); ?>" />
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
+            <link type="text/css" href="<?php echo $this->baseUrl("/css/ui-lightness/jquery-ui-1.8.18.custom.css"); ?>" rel="stylesheet" />		
+            <script type="text/javascript" src="<?php echo $this->baseUrl("/scripts/jquery-1.7.1.min.js"); ?>"></script>
+            <script type="text/javascript" src="<?php echo $this->baseUrl("/scripts/jquery-ui-1.8.18.custom.min.js"); ?>"></script>
+            <script type="text/javascript" src="<?php echo $this->baseUrl("/scripts/admin.js"); ?>"></script>
+             <script type="text/javascript" src="<?php echo $this->baseUrl("/scripts/Tutorials.js"); ?>"></script>
+            <script type="text/javascript" src="<?php echo $this->baseUrl("/scripts/jquery.validate.js"); ?>"></script>
+              <script type="text/javascript" src="<?php echo $this->baseUrl("/scripts/rateline.js"); ?>"></script>
+              <script type="text/javascript" src="<?php echo $this->baseUrl("/scripts/Currency.js"); ?>"></script>
+            <script type="text/javascript">
+                 var baseUrl="<?php echo $this->baseUrl();?>";
+            </script>
+            <style type="text/css">
+                /*demo page css*/
+                .demoHeaders { margin-top: 2em; }
+                #dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
+                #dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
+                ul#icons {margin: 0; padding: 0;}
+                ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+                ul#icons span.ui-icon {float: left; margin: 0 4px;}
+            </style>
+
+
+    </head>
+
+    <body>
+        <div id="bg_wrapper">
+            <div id="global_wrapper">
+                <div id="header">
+                    <h1>TMF <a href="#" title="TMF"></a></h1>
+                    <div class="header-user"><h5>Welcome, <a href="#">
+                                <?php
+                                   $namespace = new Zend_Session_Namespace("login"); 
+                                   echo $namespace->username;
+                                ?>
+                            </a></h5></div>      
+                    <div class="menu">
+                        <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'Index',
+    'action' => 'logout'));
+?>"><input type="button" class="button-red menu-button" value="Logout" /></a>
+                        <ul>
+                            <li><a href="#">Instances</a></li>
+                            <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'Currency',
+    'action' => 'index'));
+?>">Currencies</a></li>
+                            <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'Buslines',
+    'action' => 'index'));
+?>">Bus Lines</a></li>
+                               <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'Rate',
+    'action' => 'index'));
+?>">Rates</a></li>
+                            <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'countries',
+    'action' => 'index'));
+?>">Countries</a></li>
+                            <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'Webnews',
+    'action' => 'index'));
+?>"">Web News</a></li>
+                            <li><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'Tutorials',
+    'action' => 'index'));
+?>">Tutorials</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="main_wrapper">
+
+
+                         <?php echo $this->layout()->content ?>
+
+
+                    <h6 class="note"><br/><br/><span>*</span> Some notes can be display here. Lorem Ipsum Doller set amet.</h6>
+                </div>
+            </div>
+            <div id="footer_wrapper">
+                <div id="footer">
+                    <div class="footer-info">
+                        <h5>© 2012 IPT Quote by TMF Group</h5>
+                        <h5><span>Contact Us:</span> +44 (0)870 067 8881 or ipt.quote@tmf-group.com</h5>
+                    </div>
+                    <ul class="footer-links">
+                        <li><a href="#">Disclaimer</a><span> | </span></li> 
+                        <li><a href="#">Sitemap</a> </li>  
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

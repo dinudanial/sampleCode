@@ -1,0 +1,26 @@
+<?php
+/* Author                : Renesankar(rene@toobler.com)
+ * Company               : Toobler
+ * Email:                : info@toobler.com
+ * Web site              : http://www.toobler.com
+ * Created               : 2/03/2012
+ * Description       	 : 
+ * ==============================================================================================
+ * Change History:
+ * ----------------------------------------------------------------------------------------------
+ * Sl.No.  Date   Author   Description
+ * ----------------------------------------------------------------------------------------------
+ * 	1
+ *
+ *
+ * ----------------------------------------------------------------------------------------------
+ *
+ */
+final class admin_Model_CountryAutherised {
+    
+    const Forbidden = 'forbidden';
+    const Allowed = 'allowed';
+    const Tolerated = 'tolerated';
+}
+
+?>

@@ -1,0 +1,188 @@
+<?php
+
+class admin_Model_TutorialGroup 
+{
+    private $id;
+    private $groupName;
+    private $createdTime;
+    private $createdBy;
+    private $status;
+    
+   public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        if (!is_int($id) && $id != null) {
+            throw new Exception('Invliad arugmrnt in setId');
+        }
+        $this->id = $id;
+      
+    }
+    
+    public function getGroupName()
+    {
+        return $this->groupName;
+    }
+
+    public function setGroupName($groupName)
+    {
+        $this->groupName=$groupName;
+    }
+    
+    public function getCreatedTime()
+    {
+        return $this->createdTime;
+    }
+    
+    public function setCreatedTime($createdTime)
+    {
+        $this->createdTime=$createdTime;
+    }
+            
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+    
+    public function setCreatedBy($createdBy)
+    {
+        return $this->createdBy=$createdBy;
+    }
+    
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    public function setStatus($status)
+    {
+        $this->status=$status;
+    }
+    
+    /**
+     * Fetch all tutorialGroups present in the Database.
+     * @return Tutorial Groups
+     * @throws Exception 
+     */
+    public function getAllTutorialGroups(){
+        try {
+               $tutorialGroupDetails=array();
+               $tGroupDao=new admin_Model_TutorialsGroupDao();
+               $Groups=$tGroupDao->getGroups();
+               if($Groups)
+               {
+                  foreach ($Groups as $g)
+                  {
+                         $tGroups=new admin_Model_TutorialGroup();
+                         $tGroups->setId((integer)$g['ID_TutorialsGroup']);
+                         $tGroups->setGroupName($g['d__Name']);
+                         $tGroups->setCreatedTime($g['s__CreationTime']);
+                         $tGroups->setCreatedBy($g['s__CreatedBy']);
+                         $tGroups->setStatus($g['d__IsActive']);
+                         array_push($tutorialGroupDetails, $tGroups);
+                  }     
+               }
+               return $tutorialGroupDetails;
+               
+        } catch (Zend_Db_Table_Exception $exc) {
+            echo $exc->getMessage();
+        }
+    }
+    
+     /**
+     * Save new tutorialGroup.
+     * @param admin_Model_TutorialGroup $tutorialGroup
+     * @return Integer (last inserted id)
+     * @throws Exception 
+     */
+    
+    public function saveTutorialGroups(admin_Model_TutorialGroup $tutorialGroup)
+    {
+        try {
+            if(null==$tutorialGroup)
+            {
+                throw new Exception("No data Found in the Tutorial Group Object");
+            }
+            else
+            {
+                $name=$tutorialGroup->getGroupName();
+                $status=  $this->CheckName($name);
+                if($status!=null)
+                {
+                  $tGroup=array();
+                  $tutorialGroupDao=new admin_Model_TutorialsGroupDao();
+                  $tGroup['d__Name']=$tutorialGroup->getGroupName();
+                  $result=$tutorialGroupDao->save($tGroup);
+                  return $result;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            
+        } catch (Zend_Db_Table_Exception $exc) {
+            echo $exc->getMessage();
+        }
+            
+    }
+    
+    public function CheckName($name)
+    {
+      $tDao=new admin_Model_TutorialsGroupDao();
+      $result=$tDao->checkNameInDb($name);
+      return $result;
+    }
+
+
+    public function getTutorialGroupList()
+    {
+        try {
+               $tgDao=new admin_Model_TutorialsGroupDao();
+               $groups=$tgDao->getGroupNames();
+               if($groups)
+               {
+                   return $groups;
+               }
+               else {
+                   return false;
+               }
+        } catch (Zend_Db_Table_Exception $exc) {
+            echo $exc->getMessage();
+        }
+    }
+
+    
+    public function getGroup($GrouoId)
+    {
+        try {
+              if(null==$GrouoId || $GrouoId=="")
+              {
+                  throw new Exception;
+              }
+              else
+              {
+                  $tutorialDao=new admin_Model_TutorialsGroupDao();
+              }
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
+     }
+
+
+
+    public static function getJson(admin_Model_TutorialGroup $tg){
+        
+        $tutorialGroup = array();
+        $tutorialGroup['id'] = $tg->getId();
+        $tutorialGroup['name']=$tg->getGroupName();
+        $tutorialGroup['createdTime']=$tg->getCreatedTime();
+        $tutorialGroup['createdBy']=$tg->getCreatedBy();
+        $tutorialGroup['status']=$tg->getStatus();
+        return Zend_Json::encode($tutorialGroup);
+    }
+    
+ 
+}
+

@@ -1,0 +1,197 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ipt-quote.2/!svn/ver/355/trunk/application/modules/admin/models
+END
+QuoteElementDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/ipt-quote.2/!svn/ver/221/trunk/application/modules/admin/models/QuoteElementDao.php
+END
+Rate.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/ipt-quote.2/!svn/ver/331/trunk/application/modules/admin/models/Rate.php
+END
+LoginDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/ipt-quote.2/!svn/ver/234/trunk/application/modules/admin/models/LoginDao.php
+END
+RateLine.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/ipt-quote.2/!svn/ver/281/trunk/application/modules/admin/models/RateLine.php
+END
+Country.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ipt-quote.2/!svn/ver/298/trunk/application/modules/admin/models/Country.php
+END
+QuoteElement.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/ipt-quote.2/!svn/ver/221/trunk/application/modules/admin/models/QuoteElement.php
+END
+RegionDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/ipt-quote.2/!svn/ver/130/trunk/application/modules/admin/models/RegionDao.php
+END
+Webnews.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ipt-quote.2/!svn/ver/336/trunk/application/modules/admin/models/Webnews.php
+END
+Util.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/ipt-quote.2/!svn/ver/192/trunk/application/modules/admin/models/Util.php
+END
+User.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/ipt-quote.2/!svn/ver/14/trunk/application/modules/admin/models/User.php
+END
+TutorialGroup.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/ipt-quote.2/!svn/ver/229/trunk/application/modules/admin/models/TutorialGroup.php
+END
+QuoteDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/ipt-quote.2/!svn/ver/221/trunk/application/modules/admin/models/QuoteDao.php
+END
+CountryAutherised.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/ipt-quote.2/!svn/ver/290/trunk/application/modules/admin/models/CountryAutherised.php
+END
+Exchange.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/ipt-quote.2/!svn/ver/355/trunk/application/modules/admin/models/Exchange.php
+END
+Region.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/ipt-quote.2/!svn/ver/130/trunk/application/modules/admin/models/Region.php
+END
+BuslineDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ipt-quote.2/!svn/ver/157/trunk/application/modules/admin/models/BuslineDao.php
+END
+TutorilDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ipt-quote.2/!svn/ver/219/trunk/application/modules/admin/models/TutorilDao.php
+END
+TutorialsGroupDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/ipt-quote.2/!svn/ver/226/trunk/application/modules/admin/models/TutorialsGroupDao.php
+END
+Currency.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/ipt-quote.2/!svn/ver/320/trunk/application/modules/admin/models/Currency.php
+END
+Quote.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/ipt-quote.2/!svn/ver/221/trunk/application/modules/admin/models/Quote.php
+END
+WebnewsDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ipt-quote.2/!svn/ver/342/trunk/application/modules/admin/models/WebnewsDao.php
+END
+Busline.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ipt-quote.2/!svn/ver/155/trunk/application/modules/admin/models/Busline.php
+END
+TutorialsGroup.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/ipt-quote.2/!svn/ver/183/trunk/application/modules/admin/models/TutorialsGroup.php
+END
+FileDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ipt-quote.2/!svn/ver/298/trunk/application/modules/admin/models/FileDao.php
+END
+Tutorial.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/ipt-quote.2/!svn/ver/272/trunk/application/modules/admin/models/Tutorial.php
+END
+Login.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/ipt-quote.2/!svn/ver/233/trunk/application/modules/admin/models/Login.php
+END
+UserUtil.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/ipt-quote.2/!svn/ver/195/trunk/application/modules/admin/models/UserUtil.php
+END
+CurrencyDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/ipt-quote.2/!svn/ver/322/trunk/application/modules/admin/models/CurrencyDao.php
+END
+File.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/ipt-quote.2/!svn/ver/296/trunk/application/modules/admin/models/File.php
+END
+RateDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ipt-quote.2/!svn/ver/331/trunk/application/modules/admin/models/RateDao.php
+END
+RateLineDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/ipt-quote.2/!svn/ver/273/trunk/application/modules/admin/models/RateLineDao.php
+END
+CountryDao.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/ipt-quote.2/!svn/ver/296/trunk/application/modules/admin/models/CountryDao.php
+END

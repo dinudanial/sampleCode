@@ -1,0 +1,602 @@
+<?php
+include_once 'IptController.php';
+class Admin_RateController extends admin_IptController {
+
+    /**
+     * Initializes the controller
+     *
+     * @return void
+     */
+    public function init() {
+      
+        // Optional added for consistency
+        parent::init();
+
+        // Excel format context
+        $excelConfig =
+                array(
+                    'excel' => array(
+                        'suffix' => 'excel',
+                        'headers' => array(
+                            'Content-type' => 'application/vnd.ms-excel')),
+        );
+
+        // Init the Context Switch Action helper
+        $contextSwitch = $this->_helper->contextSwitch();
+
+        // Add the new context
+        $contextSwitch->setContexts($excelConfig);
+
+        // Set the new context to the reports action
+        $contextSwitch->addActionContext('report', 'excel');
+
+        // Initializes the action helper
+        $contextSwitch->initContext();
+    }
+
+    public function indexAction() {
+        $form = new admin_Form_RateSearch();
+        $this->view->form = $form;
+        $rateform = new admin_Form_addRate();
+        $this->view->rateform = $rateform;
+        $rateLineForm = new admin_Form_RateLine();
+        $this->view->ratelineform = $rateLineForm;
+    }
+
+    public function getcountrylistAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        if ($this->_request->isPost()) {
+            $RegionId = $this->getRequest()->getPost('regionid');
+            $country = new admin_Model_Country();
+            $countryData = $country->findCountrydata((integer) $RegionId);
+            echo Zend_Json::encode($countryData);
+            exit;
+        }
+    }
+
+    public function reportAction() {
+		
+        $filter = array();
+        $filter['country'] = $this->getRequest()->getParam('countryid');
+        $filter['region'] = $this->getRequest()->getParam('regionid');
+        $filter['rateId'] = $this->getRequest()->getParam('masterid');
+        $filter['insuranceClass'] = $this->getRequest()->getParam('insuranceClass');
+        $filter['dataIssue'] = $this->getRequest()->getParam('dataIssue');
+        try {
+            $rate = new admin_Model_Rate();
+            $rateData = $rate->find($filter);
+            $rateLineArray  =   array();
+
+           
+            //echo "<pre>";
+           // print_r($rateLinedata);exit;
+            require_once 'Spreadsheet/Excel/Writer.php';
+
+// Lets define some custom colors codes
+            define('CUSTOM_DARK_BLUE', 20);
+            define('CUSTOM_BLUE', 21);
+            define('CUSTOM_LIGHT_BLUE', 22);
+            define('CUSTOM_YELLOW', 23);
+            define('CUSTOM_GREEN', 24);
+
+// First, we create a Workbook
+            $current = getcwd();
+            if (file_exists($current . '/uploads/files/rate.xls')){
+            	@unlink($current . '/uploads/files/rate.xls');
+            }
+            $workbook = new Spreadsheet_Excel_Writer($current . '/uploads/files/rate.xls');
+
+// Add one sheet, called: Users Report
+            $worksheet = &$workbook->addWorksheet('Rates Report');
+
+// Create the custom colors on our new workbook
+// This function takes 4 params:
+//    - Code index [1 to 64]
+//    - RGB colors (0-255)
+            $workbook->setCustomColor(CUSTOM_DARK_BLUE, 31, 73, 125);
+            $workbook->setCustomColor(CUSTOM_BLUE, 0, 112, 192);
+            $workbook->setCustomColor(CUSTOM_LIGHT_BLUE, 184, 204, 228);
+            $workbook->setCustomColor(CUSTOM_YELLOW, 255, 192, 0);
+            $workbook->setCustomColor(CUSTOM_GREEN, 0, 176, 80);
+
+// Lets hide gridlines
+            $worksheet->hideScreenGridlines();
+
+// Lets create some custom styles
+            $formatHeader = &$workbook->addFormat();
+            $formatHeader =
+                    &$workbook->addFormat(
+                            array('Size' => 16,
+                                'VAlign' => 'vcenter',
+                                'HAlign' => 'center',
+                                'Bold' => 1,
+                                'Color' => 'white',
+                                'FgColor' => CUSTOM_DARK_BLUE));
+
+            $formatReportHeader =
+                    &$workbook->addFormat(
+                            array('Size' => 9,
+                                'VAlign' => 'bottom',
+                                'HAlign' => 'center',
+                                'Bold' => 1,
+                                'FgColor' => CUSTOM_LIGHT_BLUE,
+                                'TextWrap' => true));
+
+            $formatData =
+                    &$workbook->addFormat(
+                            array(
+                                'Size' => 8,
+                                'HAlign' => 'center',
+                                'VAlign' => 'vcenter'));
+
+            /**
+             * First, format the worksheet, adding the headers
+             * and row/columns custom sizes
+             */
+// Create a nice header with a dark blue background
+// The function setRow takes 3 parameters:
+//    - row index
+//    - row height
+//    - Format to apply to row [Optional]
+            $worksheet->setRow(0, 11, $formatHeader);
+            $worksheet->setRow(1, 46, $formatHeader);
+            $worksheet->setRow(2, 11, $formatHeader);
+
+// Set the size of the columns
+// The function setColumn takes 5 params:
+//     - First column
+//     - Last column
+//     - Column Width
+//     - Format [Optional, default = 0]
+//     - Hidden [Optional, default = 0]
+            $worksheet->setColumn(0, 0, 12); 
+            $worksheet->setColumn(1, 1, 9); 
+            $worksheet->setColumn(2, 2, 9); 
+            $worksheet->setColumn(3, 3, 16); 
+            $worksheet->setColumn(4, 4, 8); 
+            $worksheet->setColumn(5, 5, 12); 
+            $worksheet->setColumn(6, 6, 16); 
+            $worksheet->setColumn(7, 7, 12); 
+            $worksheet->setColumn(8, 8, 12); 
+            $worksheet->setColumn(9, 9, 12); 
+            $worksheet->setColumn(10, 10, 14); 
+            $worksheet->setColumn(11, 11, 15); 
+            $worksheet->setColumn(12, 12, 14); 
+            $worksheet->setColumn(13, 13, 16); 
+            $worksheet->setColumn(14, 14, 14); 
+            $worksheet->setColumn(15, 15, 20); 
+            $worksheet->setColumn(16, 16, 38); 
+            $worksheet->setColumn(17, 17, 34); 
+            $worksheet->setColumn(18, 18, 36);
+            $worksheet->setColumn(19, 19, 28); 
+            $worksheet->setColumn(20, 20, 36); 
+            $worksheet->setColumn(21, 21, 38); 
+            $worksheet->setColumn(22, 22, 25); 
+            $worksheet->setColumn(23, 23, 20); 
+            $worksheet->setColumn(24, 24, 25); 
+            $worksheet->setColumn(25, 25, 22); 
+            $worksheet->setColumn(26, 26, 20); 
+            $worksheet->setColumn(27, 27, 25); 
+            $worksheet->setColumn(28, 28, 26); 
+            $worksheet->setColumn(29, 29, 22); 
+            $worksheet->setColumn(30, 30, 25); 
+            $worksheet->setColumn(31, 31, 26); 
+            $worksheet->setColumn(32, 32, 22); 
+            $worksheet->setColumn(33, 33, 20); 
+            $worksheet->setColumn(34, 34, 17); 
+            $worksheet->setColumn(35, 35, 20); 
+            $worksheet->setColumn(36, 36, 21); 
+            $worksheet->setColumn(37, 37, 24); 
+            $worksheet->setColumn(38, 38, 28);
+
+            /**
+             *
+             * Once we have the format ready, add the text to the spreadsheet
+             *
+             */
+// Write a text header
+            $worksheet->write(1, 1, 'Rate report', $formatHeader);
+
+// Create the header for the data starting @ row 4
+            $indexCol = 0;
+            $indexRow = 4;
+            $worksheet->write($indexRow, $indexCol++, 'ID_RateMaster', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'Region', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'Country', $formatReportHeader);          
+            $worksheet->write($indexRow, $indexCol++, 'Insurance Class', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'TaxType', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'TaxSubClass', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'DefaultSubClass', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'Currency', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'TertiaryClass', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'RateStartDate', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'RateEndDate', $formatReportHeader);      
+            $worksheet->write($indexRow, $indexCol++, 'NonAdmittedRate', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'AdmittedRate', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'BasisOfCalculation', $formatReportHeader);           
+            $worksheet->write($indexRow, $indexCol++, 'd__TaxBorneBy', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__TaxAdministeredBy', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Admitted_TaxPayablebyInsuredandAdministeredByInsurer', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Admitted_TaxPayableByInsuredAndAdminByInsurerOrAgent', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Admitted_TaxPayableByInsurer', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Admitted_TaxPayableByInsuredLocally', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__NonAdmitted_TaxPayablebyInsuredandAdministeredByInsurer', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__NonAdmitted_TaxPayableByInsuredAndAdminByInsurerOrAgent', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__NonAdmitted_TaxPayableByInsurer', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__NonAdmitted_TaxPayableByInsuredLocally', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier1_Name', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier1_Rate_Admitted', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier1_Rate_NonAdmitted', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier2_Name', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier2_Rate_Admitted', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier2_Rate_NonAdmitted', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier3_Name', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier3_Rate_Admitted', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Multiplier3_Rate_NonAdmitted', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Band1_Minimum', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Band1_Maximum', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Band2_Minimum', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__Band2_Maximum', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__AdmittedRate_Band2', $formatReportHeader);
+            $worksheet->write($indexRow, $indexCol++, 'd__NonAdmittedRate_Band2', $formatReportHeader);
+           
+
+            $indexRow++;   // Advance to the next row
+            $indexCol = 0; // Start @ column 0
+// Print the report data
+            if (count($rateData) == 0) {
+                // No data
+                $worksheet->write(
+                        $indexRow, $indexCol, 'No data to display', $formatData);
+            } else {
+                // Write the data
+ 
+                foreach ($rateData as $rate) {
+               
+                     $rateLine =	new admin_Model_RateLine('',$rate->getId());
+                     $rateLinedata = $rateLine->findRateLines($rate->getId()); 
+                     print_r($rateLinedata);
+                     if($rateLinedata){
+                         foreach($rateLinedata as $reateDetails){
+                             
+                            $worksheet->writeNumber(
+                                $indexRow, $indexCol++, $rate->getId(), $formatData);
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $rate->getRegionName(), $formatData);
+
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $rate->getCountryName(), $formatData);
+
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $rate->getTaxType(), $formatData);
+
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $rate->getInsuranceClassName(), $formatData);
+
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $rate->getTaxSubClass(), $formatData);
+
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $rate->getDefaultSubClass(), $formatData);
+
+                            $worksheet->write(
+                                    $indexRow, $indexCol++, $rate->getCurrencyName(), $formatData);
+
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $rate->getTertiry(), $formatData);
+                             
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getRateStartDate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getRateEndDate(), $formatData);
+                                                               
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getNonAdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getAdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getBasisOfCalculationName(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getTaxAdminister(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getTaxAdminister(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getAdmittedTaxPayablebyInsuredandAdministeredByInsurer(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getAdmittedTaxPayableByInsurer(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getAdmittedTaxPayableByInsuredLocally(), $formatData);/////
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getNonAdmittedTaxPayablebyInsuredandAdministeredByInsurer(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getNonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getNonAdmittedTaxPayableByInsurer(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getNonAdmittedTaxPayableByInsuredLocally(), $formatData);/////
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier1Name(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier1AdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier1NonAdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier2Name(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier2AdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier2NonAdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier3Name(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier3AdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMultiplier3NonAdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMinimumBand1(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMaximumBand1(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMinimumBand2(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getMaximumBand2(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getBand2AdmittedRate(), $formatData);
+                            
+                            $worksheet->write(
+                                $indexRow, $indexCol++, $reateDetails->getBand2NonAdmittedRate(), $formatData);
+                            
+                             // Advance to the next row
+                             $indexRow++;
+                             $indexCol = 0;
+                         }
+                       
+                     }
+                   
+                }
+            }
+
+            /**
+             *
+             * Response with the excel file
+             *
+             */
+// Sends HTTP headers for the Excel file.
+//$workbook->send('report.xls');
+// Calls finalization methods.
+// This method should always be the last one to be called on every workbook
+            $workbook->close();
+            
+            $file = $current . '/uploads/files/rate.xls';
+
+            if (file_exists($file)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename=' . basename($file));
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($file));
+                ob_clean();
+                flush();
+                readfile($file);
+                exit;
+            }
+            //$this->view->rates = $rate->find($filter);
+        } catch (Exception $e) {
+            echo "Error :" . $e->getMessage();
+        }
+    }
+
+    public function getratelistAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $formData = $this->_request->getPost();
+        if (empty($formData) || empty($formData['region']) || empty($formData['country'])) {
+            throw new Exception("Invalid argument exception in find rates!");
+        } else {
+        	$rate =  new admin_Model_Rate();
+            $rateData = $rate->find($formData);
+            $rateJsonAaaray = array();
+            if(!isset($rateData['erorr'])){
+	            foreach ($rateData as $key) {
+	                $rateJsonAaaray[] = admin_Model_Rate::getJson($key);
+	            }
+            }else{
+            	$rateJsonAaaray['erorr'] = $rateData['erorr'];
+            }
+            echo Zend_Json::encode($rateJsonAaaray);
+            exit;
+        }
+    }
+
+    public function saveAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $form =  new admin_Form_addRate(); 
+        if ($this->_request->isPost()) {
+            $rate = new admin_Model_Rate();
+            $formData = $this->_request->getPost();           
+//            if($form->isValid($formData)){
+//                $saveResult = array();
+//                echo "succes";exit;
+                if ($formData['masterRateId'] != 'new' && $formData['masterRateId']) {
+                    $rate->setId((integer) $formData['masterRateId']);
+                }
+                $rate->setTaxType($formData['taxType']);
+                $rate->setRegion((integer) $formData['newRateRegion']);
+                $rate->setCountry((integer) $formData['newRatecountry']);
+                $rate->setCurrency((integer) $formData['currency']);
+                $rate->setInsuranceClass((integer) $formData['newRateinsuranceclass']);
+                $rate->setTaxSubClass($formData['taxSubClass']);
+                $rate->setTertiry($formData['tertiary']);
+                $rate->setDefaultSubClass((integer) $formData['defaultSubclasOrTertiary']);
+                $rate->setAutoCreate($formData['noAutoCreate']);
+                $result = $rate->saveRate($rate);
+
+                if($result){
+                    $saveResult['status']	=	$formData['masterRateId'];
+                    echo Zend_Json::encode($saveResult);exit;
+                }
+            }
+            else{
+                
+               // $form->populate($formData);
+               // print_r($form->populate($formData));
+                echo "faild";exit;
+            }           
+            	
+//        }else{
+//        	 throw new Exception("Invalid argument exception in rates!");
+//        }
+    }
+
+    public function rateeditAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        if ($this->_request->isPost()) {
+            $rateId = $this->_request->getPost('rateId');
+            $rateId = (integer) $rateId;
+            ///echo $rateId;exit;
+            if (!$rateId || !is_int($rateId)) {
+                throw new Exception("Invalid argument exception in edit rates!");
+            } else {
+                $rate = new admin_Model_Rate();
+                $rateLine = new admin_Model_RateLine('',$rateId);
+                $rateData = $rate->findRate($rateId); 
+                $rateLineData   =  $rateLine->findRateLines($rateId);
+                $dataArray['rate'] = $rate->getRateArray($rateData);
+                $dataArray['rateline'] = $rateLine->getRateLineArray($rateLineData,$rateId);
+                echo Zend_Json::encode($dataArray);exit;
+            }
+        }
+    }
+    
+    public function deleterateAction(){
+        $this->_helper->viewRenderer->setNoRender(true);      
+        if ($this->_request->isPost()) {
+            $resultArray = array();
+            $rateId = (integer)$this->_request->getPost('rateId');
+            $rate = new admin_Model_Rate();
+            $result = $rate->deleteRate($rateId);
+            if($result)
+                $resultArray['message'] = "Successfully deleted";
+            else
+                $resultArray['message'] = "Deletion failed";
+            echo Zend_Json::encode($resultArray);exit;
+        }
+    }
+
+
+    public function defaultsubclassAction(){
+          $this->_helper->viewRenderer->setNoRender(true);
+    	  if ($this->_request->isPost()) {
+            $rateId = $this->_request->getPost('rateId');
+            $country = $this->_request->getPost('country');
+            $currency = $this->_request->getPost('currency');
+            $typeOftax = $this->_request->getPost('typeOftax');
+            $insuranceClass = $this->_request->getPost('insuranceClass');
+            if($rateId && $country && $currency && $typeOftax && $insuranceClass){
+            	$dataArray	=	array();
+            	$dataArray['currency'] = $currency;
+            	$dataArray['country'] = $country;
+            	$dataArray['rateid'] = $rateId;
+            	$dataArray['typeoftax'] = $typeOftax;
+            	$dataArray['insuranceclass'] = $insuranceClass;
+            	$rate = new admin_Model_Rate();
+            	$result = $rate->findDefaultSubclass($dataArray);
+            	foreach ($result as $subclass){
+            		$jsonArray[] = 	admin_Model_Rate::getJsonRateSubclass($subclass);
+            	}
+            	echo Zend_Json::encode($jsonArray);exit;
+            }
+            else{
+            	throw new Exception("Invalid argument exception in rates!");
+            }
+    	  }
+    }
+    
+    public function removedefaultsubclassAction(){
+          $this->_helper->viewRenderer->setNoRender(true);
+          $status['status'] = false;
+    	  if ($this->_request->isPost()) {
+              $rateId = (integer)$this->_request->getPost('rateId');
+              $rate = new admin_Model_Rate();
+              $result = $rate->removeDefaultSubclass($rateId);
+              if($result){
+                  $status['status'] = $result;
+              }
+              echo Zend_Json::encode($status);exit;
+          }else{
+              throw new Exception("Invalid post method in removeDefaultSubclass!");
+          }
+    }
+    
+    public function savedefaultsubclassAction(){
+        $this->_helper->viewRenderer->setNoRender(true);
+        if ($this->_request->isPost()) {
+            $rateId = (integer)$this->_request->getPost('rateId');
+            $subclass = (integer)$this->_request->getPost('subClass'); 
+            $rate = new admin_Model_Rate();
+            $defaultClass = $rate->saveDefaultSubClass($rateId,$subclass);
+            $jsonArray    =  array();
+            if($defaultClass)
+                $jsonArray['status']    =   1;
+            else
+                $jsonArray['status']    =   0;
+            echo Zend_Json::encode($jsonArray);exit;
+        }
+    }
+    
+    public function duplicaterateAction(){
+        $this->_helper->viewRenderer->setNoRender(true);
+        if ($this->_request->isPost()) {
+            $rateId = (integer)$this->_request->getPost('rateId');
+            $rate = new admin_Model_Rate();
+            $rate->setId($rateId);
+            $dataArray['rateline'] = '';
+            $dataArray['rate'] = '';
+            $result = $rate->duplicateRate($rate);
+            if($result){
+                $rateMasterId = (integer)$result;
+                $rate = new admin_Model_Rate();
+                $rateLine = new admin_Model_RateLine('',$rateMasterId);
+                $rateData = $rate->findRate($rateMasterId); 
+                
+                $rateLineData   =  $rateLine->findRateLines($rateMasterId);
+                $dataArray['rate'] = $rate->getRateArray($rateData);
+                $dataArray['rateline'] = $rateLine->getRateLineArray($rateLineData,$rateMasterId);
+            }
+            echo Zend_Json::encode($dataArray);exit;
+        }
+    }
+
+}
+

@@ -1,0 +1,53 @@
+<?php
+
+class Admin_Model_Exchange 
+{
+   private $currecyId;
+   private $currencyName;
+   private $symbol;
+   private $exchangeRate;
+   
+   
+   public function setCurrencyName($currencyName)
+   {
+       $this->currencyName=$currencyName;
+   }
+   
+   public function getCurrencyName()
+   {
+       return $this->currencyName;
+   }
+   
+   public function setSymbol($symbol)
+   {
+       $this->symbol=$symbol;
+   }
+   
+   public function getSymbol()
+   {
+       return $this->symbol;
+   }
+   
+   public function  setExchangeRate($exchangeRate)
+   {
+       $this->exchangeRate=$exchangeRate;
+   }
+   
+   public function getExchageRate()
+   {
+       return $this->exchangeRate;
+   }
+   
+   public function setCurrencyId($currencyId)
+   {
+       $this->currecyId=$currencyId;
+   }
+   
+   public function getCurrency()
+   {
+       return $this->currecyId;
+   }
+
+}
+
+    

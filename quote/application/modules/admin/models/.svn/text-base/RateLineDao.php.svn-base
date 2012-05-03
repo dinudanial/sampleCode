@@ -1,0 +1,125 @@
+<?php
+
+class admin_Model_RateLineDao extends Zend_Db_Table_Abstract {
+    
+    protected $_name = 'Rateline';
+    protected $_primary = 'ID_RateLine';
+
+    public function saveRateLine(array $rateLine) {
+    	//echo "<pre>";
+    	//print_r($rateLine);exit;
+        try {
+        	if($rateLine['ID_RateLine']==null){
+        		//echo "Insert ";exit;
+        		$result = $this->insert($rateLine);
+        	}
+            else {
+            	//echo "Update";exit;
+            	$this->editRateLine($rateLine);
+            }
+            	
+            return true;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function editRateLine(array $rateLine) {
+        try {
+            $where['ID_RateLine = ?'] = $rateLine['ID_RateLine'];
+            $this->update($rateLine, $where);
+            return true;
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+    
+    public function findRateLines($rateId){
+        try{
+           
+            $select =  $this->select()
+                    ->from($this,array('d__Admitted_TaxPayableByInsuredAndAdminByInsurerOrAgent','d__Admitted_TaxPayablebyInsuredandAdministeredByInsurer','d__Admitted_TaxPayableByInsuredLocally',
+                        'd__Admitted_TaxPayableByInsurer','d__AdmittedRate','d__AdmittedRate_Band2','d__AdmittedRate_Band3',
+                        'd__Authorised','d__BandApplyProportionately','d__DeMinimis_Enabled','d__EconomicArea','d__Layering',
+                        'd__LayeringPercentage','d__Multiplier1_Name','d__Multiplier2_Name','d__Multiplier3_Name',
+                        'd__NoAutoCreate','d__NonAdmitted_TaxPayableByInsuredAndAdminByInsurerOrAgent','d__NonAdmitted_TaxPayablebyInsuredandAdministeredByInsurer',
+                        'd__NonAdmitted_TaxPayableByInsuredLocally','d__NonAdmitted_TaxPayableByInsurer','d__ObsoleteRate',
+                        'd__RateNotes','d__TaxAdministeredBy','d__TaxBorneBy','s__CreationAccount','s__ModificationAccount',
+                        'd__AmountPerDocument','d__AmountPerPersonInsured','d__AmountPerPolicy','d__AmountPerX','d__AmountPerXValue',
+                        'd__Band1_Maximum','d__Band1_Minimum','d__Band2_Maximum','d__Band2_Minimum','d__Band3_Maximum',
+                        'd__Band3_Minimum','d__DefaultSubClass','d__DeMinimis_PremiumAllocationThreshold','d__DeMinimis_TotalPremiumThreshold',
+                        'd__DomesticTransportationElement','d__InsuredResidenceApplicable','d__MaltaStampDuty_Premium_Level1',
+                        'd__MaltaStampDuty_Premium_Level1_Rate','d__MaltaStampDuty_Premium_Level2','d__MaltaStampDuty_Premium_Level2_Rate',
+                        'd__MaltaStampDuty_Premium_Level3','d__MaltaStampDuty_Premium_Level3_Rate','d__MultiInsurerCalculationGroup',
+                        'd__Multiplier1_Rate_Admitted','d__Multiplier1_Rate_NonAdmitted','d__Multiplier2_Rate_Admitted',
+                        'd__Multiplier2_Rate_NonAdmitted','d__Multiplier3_Rate_Admitted','d__Multiplier3_Rate_NonAdmitted',
+                        'd__NonAdmittedRate','d__NonAdmittedRate_Band2','d__NonAdmittedRate_Band3','d__NonFireElementRate',
+                        'd__TaxMaximum','d__TaxMinimum','ID_BasisOfCalculation','ID_Country','ID_Currency',
+                        'ID_InsuranceClass','ID_RateAdditional','ID_RateDefault','ID_RateLine','ID_RateMaster',
+                        'ID_Region','s__TaxRateDisplay','s__UpdateCopyToServer','d__RateEndDate','d__RateStartDate','d__UseBanding'              
+                        ))
+                    ->where('Rateline.ID_RateMaster = ?',$rateId)
+                    ->join('BasisOfCalculation', 'BasisOfCalculation.ID_BasisOfCalculation = Rateline.ID_BasisOfCalculation', array('BasisOfCalculation.d__BasisOfCalculation'))
+                    ->setIntegrityCheck(false);
+  
+            $stmt = $select->query();    		
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0){
+                return $rows;
+            }
+            else
+                return false;
+                   
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+        
+    }
+    public function getRateLine(admin_Model_RateLine $rateline){
+        try{
+            $select = $this->select()
+                    ->from($this,array('d__Admitted_TaxPayableByInsuredAndAdminByInsurerOrAgent','d__Admitted_TaxPayablebyInsuredandAdministeredByInsurer','d__Admitted_TaxPayableByInsuredLocally',
+                        'd__Admitted_TaxPayableByInsurer','d__AdmittedRate','d__AdmittedRate_Band2','d__AdmittedRate_Band3',
+                        'd__Authorised','d__BandApplyProportionately','d__DeMinimis_Enabled','d__EconomicArea','d__Layering',
+                        'd__LayeringPercentage','d__Multiplier1_Name','d__Multiplier2_Name','d__Multiplier3_Name',
+                        'd__NoAutoCreate','d__NonAdmitted_TaxPayableByInsuredAndAdminByInsurerOrAgent','d__NonAdmitted_TaxPayablebyInsuredandAdministeredByInsurer',
+                        'd__NonAdmitted_TaxPayableByInsuredLocally','d__NonAdmitted_TaxPayableByInsurer','d__ObsoleteRate',
+                        'd__RateNotes','d__TaxAdministeredBy','d__TaxBorneBy','s__CreationAccount','s__ModificationAccount',
+                        'd__AmountPerDocument','d__AmountPerPersonInsured','d__AmountPerPolicy','d__AmountPerX','d__AmountPerXValue',
+                        'd__Band1_Maximum','d__Band1_Minimum','d__Band2_Maximum','d__Band2_Minimum','d__Band3_Maximum',
+                        'd__Band3_Minimum','d__DefaultSubClass','d__DeMinimis_PremiumAllocationThreshold','d__DeMinimis_TotalPremiumThreshold',
+                        'd__DomesticTransportationElement','d__InsuredResidenceApplicable','d__MaltaStampDuty_Premium_Level1',
+                        'd__MaltaStampDuty_Premium_Level1_Rate','d__MaltaStampDuty_Premium_Level2','d__MaltaStampDuty_Premium_Level2_Rate',
+                        'd__MaltaStampDuty_Premium_Level3','d__MaltaStampDuty_Premium_Level3_Rate','d__MultiInsurerCalculationGroup',
+                        'd__Multiplier1_Rate_Admitted','d__Multiplier1_Rate_NonAdmitted','d__Multiplier2_Rate_Admitted',
+                        'd__Multiplier2_Rate_NonAdmitted','d__Multiplier3_Rate_Admitted','d__Multiplier3_Rate_NonAdmitted',
+                        'd__NonAdmittedRate','d__NonAdmittedRate_Band2','d__NonAdmittedRate_Band3','d__NonFireElementRate',
+                        'd__TaxMaximum','d__TaxMinimum','ID_BasisOfCalculation','ID_Country','ID_Currency',
+                        'ID_InsuranceClass','ID_RateAdditional','ID_RateDefault','ID_RateLine','ID_RateMaster',
+                        'ID_Region','s__TaxRateDisplay','s__UpdateCopyToServer','d__RateEndDate','d__RateStartDate','d__UseBanding'))
+                    ->where('ID_RateLine=?',$rateline->getId())
+                    ->where('ID_RateMaster=?',$rateline->getRateMasterId());
+            $stmt = $select->query();    		
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0){
+                return $rows;
+            }
+            else
+                return false;
+            
+        } catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+    
+    public function deleteRateline($ratelineId){
+        try{
+            $where['ID_RateLine = ?'] = $ratelineId;
+            $this->delete($where);
+            return true;
+        }catch (Zend_Db_Table_Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+}

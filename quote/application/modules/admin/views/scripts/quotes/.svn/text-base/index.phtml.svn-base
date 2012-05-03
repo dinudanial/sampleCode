@@ -1,0 +1,22 @@
+
+<div class="page-title">
+    <h2>Create Step 1</h2>
+    <ul class="breadcrumb">
+        <li><a href="#">Admin</a><span> > </span>
+        <!--</li><li></li>-->
+        <li><a href="#" class="active">Create step 1</a></li>
+    </ul>
+</div>
+
+<div class="content">
+	
+	    <?php echo $this->form;?> 
+	    
+</div>
+
+</div>
+
+
+
+
+

@@ -1,0 +1,171 @@
+<?php
+
+class admin_Model_Tutorial {
+
+    private $id;
+    private $tutorialName;
+    private $groupId;
+    private $htmlUrl;
+    private $pdfUrl;
+    private $createdDate;
+    private $createdBy;
+    private $status;
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        if (!is_int($id) && $id != null) {
+            throw new Exception('Invliad arugmrnt in setId');
+        }
+        $this->id = $id;
+        $this->id = $id;
+    }
+
+    public function getTutorialName() {
+        return $this->tutorialName;
+    }
+
+    public function setTutorialName($tutorialName) {
+        $this->tutorialName = $tutorialName;
+    }
+
+    public function getGroupId() {
+
+        return $this->groupId;
+    }
+
+    public function setGroupId($groupId) {
+        if (!is_int($groupId)) {
+            throw new Exception('Invliad arugmrnt in setGroupId');
+        }
+        $this->groupId = $groupId;
+    }
+
+    public function getHtmlUrl() {
+        return $this->htmlUrl;
+    }
+
+    public function setHtmlUrl($htmlUrl) {
+        $this->htmlUrl = $htmlUrl;
+    }
+
+    public function getPdfUrl() {
+        return $this->pdfUrl;
+    }
+
+    public function setPdfUrl($pdfUrl) {
+        $this->pdfUrl = $pdfUrl;
+    }
+
+    public function getCreatedDate() {
+        return $this->createdDate;
+    }
+
+    public function setCreatedDate($createdDate) {
+        $this->createdDate = $createdDate;
+    }
+
+    public function getCreatedBy() {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy($createdBy) {
+        $this->createdBy = $createdBy;
+    }
+
+    public function getStatus() {
+        return $this->status;
+    }
+
+    public function setStatus($status) {
+        $this->status = $status;
+    }
+    /**
+     * Adds new tutorial.
+     * @param admin_Model_Tutorial $tutorial
+     * @return Integer (last inserted id)
+     * @throws Exception 
+     */
+    public function addTutorial(admin_Model_Tutorial $tutorial) {
+        try {
+            $tdao = new admin_Model_TutorilDao();
+            if (null == $tutorial->getId()) {
+                return $tdao->save($tutorial->getArray($tutorial));
+            } else {
+                return $tdao->edit($tutorial->getArray($tutorial));
+            }
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
+    /**
+     * Selects tutorials in a gruop if $gruopId is not null, else return all turorials.
+     * @param type $gruopId
+     * @return array $tutorialArray
+     * @throws Exception 
+     */
+    public function getTutorials($gruopId = null) {
+        if (null != $gruopId && !is_int($gruopId)) {
+            throw new Exception('Invalid groupId in getTutorials!');
+        }
+        $tdao = new admin_Model_TutorilDao();
+        try {
+            if (null == $gruopId) {
+                $tutorials = $tdao->getAllTutorils();
+            }else{
+                $tutorials = $tdao->getTutorils($gruopId);
+            }
+            $tutorialArray = array();
+            foreach ($tutorials as $t) {
+
+                $tutorial = new admin_Model_Tutorial();
+                $tutorial->setId((integer) $t['ID_Tutorials']);
+                $tutorial->setCreatedBy($t['s__AddedBy']);
+                $tutorial->setCreatedDate($t['s__CreationTime']);
+                $tutorial->setGroupId((integer) $t['ID_TutorialsGroup']);
+                $tutorial->setPdfUrl($t['d__Pdf']);
+                $tutorial->setHtmlUrl($t['d__Html']);
+                $tutorial->setTutorialName($t['d__Name']);
+                $tutorial->setStatus($t['d__IsActive']);
+                array_push($tutorialArray, $tutorial);
+            }
+
+            return $tutorialArray;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    
+    public function changeStatus($tutorialId, $status) {
+        if (!is_int($tutorialId) || !is_bool($status)) {
+            throw new exception('Invlalid Argument Exception in deleteTutorial');
+        }
+        try {
+            $tdao = new admin_Model_TutorilDao();
+            $tdao->changeStatus($tutorialId, $status);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    private function getArray(admin_Model_Tutorial $t) {
+
+        $tutorial = array();
+        $tutorial['ID_Tutorials'] = $t->getId();
+        $tutorial['d__Name'] = $t->getTutorialName();
+        $tutorial['ID_TutorialsGroup'] = $t->getGroupId();
+        $tutorial['s__AddedBy'] = $t->getCreatedBy();
+        $tutorial['s__CreationTime'] = $t->getCreatedDate();
+        $tutorial['d__Html'] = $t->getHtmlUrl();
+        $tutorial['d__Pdf'] = $t->getPdfUrl();
+        $tutorial['d__IsActive'] = $t->getStatus();
+        return $tutorial;
+    }
+
+}
+
+?>

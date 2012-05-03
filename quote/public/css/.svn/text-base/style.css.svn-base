@@ -1,0 +1,602 @@
+@charset "utf-8";
+/* CSS Document */
+/*
+-----------------------------------------------
+	GENERAL
+-----------------------------------------------
+*/
+body{
+	background:url(../img/body_bg.jpg) #eee;
+	font-family: 'Open Sans', sans-serif;
+	font-size:100%;
+	color:#555;
+}
+*{
+	margin:0;
+	padding:0;
+	border:0;
+	outline:0;
+}
+h2{
+	font-size:24px;
+	font-weight:600;
+	color:#191919;
+}
+h3{
+	font-size:12px;
+	font-weight:600;
+	color:#666;
+}
+a{
+	text-decoration:none;
+}
+ul{
+	list-style:none;
+}
+input[type="text"],input[type="password"]{
+	width:255px;
+	height:20px;
+	background:#fff;
+	border:1px solid #bbb;
+	-webkit-box-shadow: inset 0px 1px 2px #ddd;
+	-moz-box-shadow: inset 0px 1px 2px #ddd;
+	box-shadow: inset 0px 1px 2px #ddd;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	font-family: 'Open Sans', sans-serif;
+        
+	font-size:12px;
+	color:#555;
+	padding:5px;
+}
+#textboxEntry {
+    font-family: 'Open Sans', sans-serif;
+    color:#FF0000;
+}
+input[type="button"]{	
+	cursor:pointer;
+}
+#bg_wrapper{
+	width:100%;
+	background:url(../img/top_bg.jpg) repeat-x top;
+}
+/*------------------WRAPPERS-------------------*/
+#global_wrapper{
+	width:980px;
+	display:block;
+	margin:0 auto;
+}
+#main_wrapper{
+	width:980px;
+	display:block;	
+	clear:both;
+	padding:0 0 35px 0;
+}
+/*
+-------------------------------------------------
+	HEADER
+-------------------------------------------------
+*/
+#header{
+	width:980px;
+	height:102px;
+	display:block;
+	overflow:hidden;
+	position:relative;
+}
+#header h1{
+	text-indent:-9999px;
+}
+#header h1 a{
+	width:140px;
+	height:102px;
+	display:block;
+	background:url(../img/tmf.png) no-repeat;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.header-user{
+	display:block;
+	text-align:right;
+	position:absolute;
+	top:11px;
+	right:0;
+}
+.header-user h5{
+	font-size:11px;
+	font-weight:400;
+	font-style:italic;
+	color:#666;
+}
+.header-user h5 a{
+	font-weight:600;
+	color:#191919;
+}
+.header-user h5 a:hover{
+	 color:#b30f0f;
+}
+/*-------------------MENU--------------------*/
+.menu{
+	width:880px;
+	height:30px;
+	display:block;
+	position:absolute;
+	right:0;
+	bottom:22px;
+	text-align:right;
+}
+.menu ul{
+	float:right;
+	padding:0 25px 0 0;
+}
+.menu ul li{
+	display:inline;	
+	padding:0 14px 0 20px;
+}
+.menu ul li + li{
+	background:url(../img/menu_line.jpg) no-repeat left;
+}
+.menu ul li a{
+	display:inline;
+	font-size:13px;
+	font-weight:700;
+	color:#b5b5b5;
+	text-transform:uppercase;
+}
+.menu ul li a:hover, .menu ul li a.active{
+	color:#fff;
+}
+.menu-button{
+	float:right;
+	margin:2px 0 0 0;
+}
+/*
+-----------------------------------------------
+	CONTENT
+-----------------------------------------------
+*/
+.content{
+	width:950px;
+	display:block;
+	position:relative;
+	overflow:hidden;
+	background:#fff;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0px 0px 3px #c3c3c3;
+	-moz-box-shadow: 0px 0px 3px #c3c3c3;
+	box-shadow: 0px 0px 3px #c3c3c3;	
+	margin:0 0 20px 0;
+	padding:55px 15px 10px 15px;
+}
+.content-title{
+	width:960px;
+	height:35px;
+	display:block;
+	background:url(../img/title_bg.jpg) repeat-x;
+	-webkit-border-top-left-radius: 4px;
+	-moz-border-top-left-radius: 4px;
+	border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-moz-border-top-right-radius: 4px;
+	border-top-right-radius: 4px;
+	line-height:33px;
+	position:absolute;
+	top:0;
+	left:0;
+	padding:0 10px;
+}
+.content-title h3{
+	background:url(../img/grid_bg.jpg) no-repeat 4px 12px;
+	padding:0 0 0 20px;
+}
+.page-title{
+	width:980px;
+	display:block;
+	overflow:hidden;
+	text-align:center;
+	position:relative;
+	padding:2px 0 20px 0;
+}
+.note{
+	font-size:11px;
+	font-weight:400;
+	font-style:italic;
+	color:#555;
+	margin:-8px 0 0 28px;
+}
+.note span{
+	color:#b00f0f;
+}
+/*-------------------BREADCRUMB--------------------*/
+ul.breadcrumb{
+	width:330px;
+	position:absolute;
+	top:11px;
+	right:0;
+	text-align:right;	
+}
+ul.breadcrumb li{
+	display:inline;
+	font-size:11px;
+	font-weight:400;
+	color:#555;
+}
+ul.breadcrumb li span{
+	padding:0 5px;
+}
+ul.breadcrumb li a{
+	color:#555;
+}
+ul.breadcrumb li a:hover{
+	color:#b30f0f;
+}
+ul.breadcrumb li a.active{
+	font-weight:700;
+	color:#333;
+	cursor:default;
+}
+/*-------------------TABLE--------------------*/
+.table{
+	font-size:11px;
+	font-weight:400;
+	color:#555;	
+}
+.table tr th{
+	font-size:12px;
+	font-weight:600;
+	text-align:left;
+	padding:0 0 6px 0;
+}
+.table tr td{
+	border-bottom:1px solid #e3e3e3;
+	padding:5px 0;
+}
+.table tr td a{
+	color:#b30f0f;
+}
+.sl-no{
+	width:45px;
+	text-align:center !important;
+}
+.edit{
+	display:block;
+	float:left;
+	font-size:11px;
+	font-weight:600;
+	color:#191919 !important;
+}
+.save{
+	font-size:11px;
+	font-weight:600;
+	color: mediumblue!important;
+}
+.delete{
+	width:13px;
+	height:15px;
+	display:block;
+	float:right;
+	background:url(../img/delete.jpg) no-repeat;
+	margin:0 15px 0 0;
+}
+/*-------------------PAGINATION--------------------*/
+.pagination{
+	display:block;
+	clear:both;
+	overflow:hidden;
+	padding:20px 0 15px 0;
+}
+.pagination h6, .pagination label{
+	display:block;	
+	font-size:11px;
+	font-weight:400;
+	font-style:italic;
+	color:#555;
+}
+.pagination h6 span{
+	font-weight:600;
+	color:#191919;
+}
+.page-count{
+	width:200px;
+	float:left;
+}
+ul.page-nav{
+	width:160px;
+	float:right;
+	display:block;
+	text-align:right;
+	padding:2px 10px 0 0;
+}
+ul.page-nav li{
+	display:inline;
+	font-size:11px;
+	font-weight:700;
+	color:#191919;
+} 
+ul.page-nav li span{
+	padding:0 6px;
+}
+ul.page-nav li a{	
+	color:#191919;
+}
+ul.page-nav li a:hover{	
+	color:#b30f0f;
+}
+.page-jump{
+	width:90px;
+	float:right;
+	padding:0 9px 0 0;
+}
+.pagination label{
+	float:left;
+	padding:2px 0 0 0;
+}
+.jump-text{
+	width:14px !important;
+	height:8px !important;
+	font-size:11px !important;
+	float:right;
+	text-align:center;
+}
+/*--------------------FORM----------------------*/
+.form{
+	display:block;
+	padding:10px 15px;
+}
+.form-element{
+	display:block;
+	clear:both;
+	overflow:hidden;
+	padding:0 0 10px 0;
+}
+.form label{
+	width:220px;
+	display:block;
+	float:left;
+	font-size:11px;
+	font-weight:700;
+	color:#555;
+	padding:7px 10px 0 0;
+}
+/*--------------------BUTTON----------------------*/
+.button-red{
+	height:24px;
+	background:url(../img/button_red.jpg) repeat-x;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	font-family: 'Open Sans', sans-serif;
+	font-size:11px;
+	font-weight:700;
+	color:#fff;
+	line-height:22px;
+	text-shadow:1px 1px 1px #8c0b0c;
+	padding:0 6px 4px 6px;
+}
+.button-red:hover{
+	background-position:0 -24px;
+}
+.button-black{
+	height:30px;
+	background:url(../img/button_black.jpg) repeat-x;
+	border:1px solid #222;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	font-family: 'Open Sans', sans-serif;
+	font-size:11px;
+	font-weight:700;
+	color:#fff;
+	line-height:25px;
+	text-shadow:1px 1px 1px #222;
+	text-transform:uppercase;
+	padding:0 10px 3px 10px;
+}
+.button-black:hover{
+	background-position:0 -30px;
+}
+.form-button{
+	margin:5px 0 0 170px;
+}
+/*
+-----------------------------------------------
+	FOOTER
+-----------------------------------------------
+*/
+#footer_wrapper{
+	width:100%;
+	height:135px;
+	background:url(../img/footer_bg.jpg) repeat-x;
+}
+#footer{
+	width:920px;
+	height:85px;
+	display:block;
+	overflow:hidden;
+	margin:0 auto;
+	padding:50px 30px 0 30px;
+}
+#footer h5{
+	font-size:11px;
+	font-weight:600;
+	color:#aaa;
+	padding:0 0 4px 0;
+}
+#footer h5 span{
+	color:#fff;
+}
+.footer-info{
+	width:400px;
+	float:left;
+}
+ul.footer-links{
+	width:400px;
+	float:right;
+	text-align:right;
+	padding:10px 0 0 0;
+}
+ul.footer-links li{
+	display:inline;
+	font-size:11px;
+	color:#666;
+}
+ul.footer-links li span{
+	padding:0 10px;
+}
+ul.footer-links li a{
+	color:#666;
+}
+ul.footer-links li a:hover{
+	color:#bbb;
+}
+/*
+------------------------------
+	Country Form
+------------------------------
+	*/
+.adminttedentryshow{
+	display: block;
+}
+.adminttedentryhide{
+	display: none;
+}
+/*
+----------------------------------
+	Rate Page
+----------------------------------
+*/
+.rateshow{
+	display: block;
+}
+.ratehidden{
+	display: none;
+}
+/*################################################## Style Added for AddCountry ######################################## */
+#addCountry #autherised, #addCountry .adminttedentryshow, #rateSearch dl dd select, #ratePage select, #saveBusline select{
+	border: 1px solid #BBBBBB;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 2px #DDDDDD inset;
+    color: #555555;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    height: 30px;
+    background:#fff;
+    padding: 5px;
+    width: 25%;
+    float:left;
+}
+#insuranceclassselect{
+	border: 1px solid #BBBBBB;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 2px #DDDDDD inset;
+    color: #555555;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    height: 25px;
+    background:#fff;
+    padding: 3px;
+    width: 25%;
+    margin-top:4px;
+}
+#residenceDropDown-label{
+	clear:both;
+}
+#addCountry dl dt, #rateSearch dl dt, #addCountry dl dd, #rateSearch dl dd, #addRate dl dt, #addRate dl dd, #saveBusline dl dt, #saveBusline dl dd, #webnewsForm dl dt, #webnewsForm dl dd{
+margin:5px 0px !important;
+height:auto !important;
+overflow:hidden !important;
+border:1px solid #fff;
+}
+#saveBusline dl dt, #saveBusline dl dd, #webnewsForm dl dd, #webnewsForm dl dt, #addCountry dl dd, #addCountry dl dt, #rateSearch dl dd, #rateSearch dl dt, #rateSearch dl dd, #rateSearch dl dt{
+border:none !important;	
+}
+#newsDate-element, #newsDate{
+float:left;
+width:54%;
+}
+#newsDate-element img{
+float:left !important;
+margin:6px 0px 0px 5px;
+}
+#addCountry dl dt, #rateSearch dl dt, #addRate dl dt, #saveBusline dl dt, #webnewsForm dl dt{
+width:40% !important;
+float:left !important;
+text-align:left !important;	
+}
+#addCountry dl dd, #rateSearch dl dd, #addRate dl dt, #saveBusline dl dd, #webnewsForm dl dd{
+width:50% !important;
+float:left !important;
+text-align:left !important;	
+}
+#addCountry dl dt span{
+width:40% !important;
+float:left !important;
+text-align:left !important;
+}
+#addCountry dl dd span{
+width:50% !important;
+float:left !important;
+text-align:left !important;
+}
+#addCountry .autherised-element{
+width:50% !important;
+}
+#admitted_type-element label{
+width:20%;
+float:left;
+}
+#defaultAdmittedEntry1-label{
+display:none !important;
+}
+.adminttedentryhide{
+margin:0px !important;
+}
+#addAndDownload{
+clear:both;
+float:left;
+margin:20px 0 0 12px;
+}
+#rateTable{
+	clear:both;
+	margin:30px 0 10px 12px;
+}
+
+.editRate:hover{
+	cursor: pointer;
+}
+.editNews:hover,.defaultSubClass:hover{
+	cursor: pointer;
+}
+#previousfile{
+    width: 310px;
+    float: right;
+}
+subclassContainer,.SubclassChild{
+    width: 100%;
+}
+.Subclass{
+    width: 50%;
+    float: left;
+
+}
+
+.subclassName{
+    width: 50%;
+    float: left;
+    background-color:#fcc;
+
+}
+.subclassLink{
+     width: 50%;
+     float: left;
+     background-color:#DAECCB;
+}
+.subClass,.defaultSubClass{
+    width: 30%;
+    float: right;
+    
+}

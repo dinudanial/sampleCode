@@ -1,0 +1,13 @@
+<?php
+
+class Admin_ReportController {
+     public function init() {
+         
+     }
+    
+    public function getExcelReportAction(){
+        $this->_helper->viewRenderer->setNoRender(true);
+    }
+}
+
+?>

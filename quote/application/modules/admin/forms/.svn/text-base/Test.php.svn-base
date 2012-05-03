@@ -1,0 +1,29 @@
+<?php
+
+class admin_Form_Test extends Zend_Form
+{
+
+    public function init()
+    {
+        $this->setAction('/my/action')
+                ->setAttribs(array(
+                    'class' => 'form',
+                    'id'
+                    => 'example'
+                ))
+                ->setMethod('post');
+        $title = new Zend_Form_Element_Text('title');
+        $title->setLabel('Title:')
+                ->setOptions(array('size' => '35'
+                ));
+        $submit = new Zend_Form_Element_Submit('submit', array(
+                    'label' => 'Submit',
+                    'class' => 'submit'
+                ));
+        $this->addElement($title)
+                ->addElement($submit);
+    }
+
+
+}
+

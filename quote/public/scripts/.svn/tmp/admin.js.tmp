@@ -1,0 +1,71 @@
+    $(function(){
+        $("#accordion").accordion({
+            header: "h3",
+            autoHeight: false
+        });
+        // Dialog			
+        $('#dialog').dialog({
+            autoOpen: false,
+            width: 800,
+            buttons: {
+                "Ok": function() { 
+                    $.post(baseUrl+"/admin/Countries/savecountry",$('#addCountry').serialize(),function($data){
+                       
+                        $('#dialog').dialog("close");
+                    },"json");
+                }, 
+                "Cancel": function() { 
+                    $(this).dialog("close"); 
+                } 
+            }
+        });
+				
+        // Dialog Link
+        $('.dialog_link').click(function(){
+            var CountyId=$(this).attr('rel');
+            $("#countryid").attr("value",CountyId);
+            $.post(baseUrl+"/admin/Countries/getcountrydetails",{countryId:CountyId},function($data){
+                $("#name").attr("value",$data.country);
+                $("#autherised").attr("value",$data.authorised);
+                if($data.standingDataApplicable==true)
+                {
+                    $("#sendingDataApplicable").attr("checked","checked");
+                }
+                if($data.admittedType==1)
+                {
+                     $('#admitted_type').attr("checked","checked");
+                     console.log("ok");
+                }
+                else
+                {
+                     $('#admitted_type').attr("checked","unchecked");
+                }
+              
+               $("#defaultAdmittedEntry").attr("value",$data.admittedEntry);
+               
+               if($data.residencePullDown==true)
+                   {
+                       $('#residenceDropDown').attr("checked","checked");
+                   }
+               if($data.lockAdmitted==true)
+                   {
+                       $('#lockAdmitted').attr("checked","checked");
+                   }
+               if($data.LPAN==true)
+                   {
+                       $('#lpan').attr("checked","checked");
+                   }
+                $("#countrycommentary").text($data.countryCommentary);
+            },"json");
+            
+            $('#dialog').dialog('open');
+            return false;
+        });
+				
+        //hover states on the static widgets
+        $('#dialog_link, ul#icons li').hover(
+        function() {$(this).addClass('ui-state-hover');}, 
+        function() {$(this).removeClass('ui-state-hover');}
+    );
+});
+

@@ -1,0 +1,53 @@
+<?php
+
+class admin_Form_RateSearch extends Zend_Form {
+
+    public function init() {
+
+        $this->setAction('/my/action')
+                ->setAttribs(array(
+                    'class' => 'form',
+                    'id'
+                    => 'addCountry'
+                ))
+                ->setMethod('post');
+
+        $regioncontrol = new Zend_Form_Element_Select('region');
+        $regioncontrol->setLabel("Region")
+                ->setRequired(true)
+                ->setAttrib('id', 'regioncontrol')
+                ->addValidator('NotEmpty', true);
+
+        $r = new admin_Model_Region();
+        $regions = $r->getRegionlist();
+        $regioncontrol->addMultiOption("", '');
+        foreach ($regions as $rx) {
+            $regioncontrol->addMultiOption($rx['ID_Region'], $rx['d__RegionName']);
+        }
+
+        $country = new zend_Form_Element_select('country');
+        $country->setLabel("Country")
+                ->setRequired(true)
+                ->addValidator("NotEmpty", true);
+
+        $showButton = new Zend_Form_Element_Button('show');
+        $showButton->setLabel('Show')
+                ->setAttrib('id', 'show');
+
+        $insuranceclass = new Zend_Form_Element_Select('insuranceclass');
+        $insuranceObject = new admin_Model_Util();
+        $insuranceResult = admin_Model_Util::getInsuranceClasses();
+        $insuranceclass->setLabel("Insurance Class")->setMultiOptions($insuranceResult);
+
+        $masterRateId = new Zend_Form_Element_Text('masterid');
+        $masterRateId->setLabel('Master Rate Id')
+                ->addFilter('StripTags');
+
+        $dateissue = new Zend_Form_Element_Checkbox('dataissue');
+        $dateissue->setLabel('Data Issue');
+
+        $this->addElements(array($regioncontrol, $country, $showButton, $insuranceclass, $masterRateId, $dateissue));
+    }
+
+}
+

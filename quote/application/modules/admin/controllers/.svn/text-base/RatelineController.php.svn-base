@@ -1,0 +1,190 @@
+<?php
+class Admin_RatelineController extends Zend_Controller_Action {
+	public function init() {
+		 $namespace = new Zend_Session_Namespace("login"); 
+             if($namespace->username==null)
+             {
+                 $this->_redirect("/admin/Index/index");
+             }
+	}
+	 public function indexAction() {
+	 	
+	 }
+	 public function saveAction(){
+            $status['status'] = false;
+            $this->_helper->viewRenderer->setNoRender(true);
+            if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+//            echo "<pre>";
+//            print_r($formData);exit;
+            $ratelineId = '';
+            if ($formData['rateLineId'] != 'new' && $formData['rateLineId']) {
+                $ratelineId = (integer) $formData['rateLineId'];
+            }
+                 
+            $rateLine = new admin_Model_RateLine($ratelineId,(integer)$formData['MasterRateId']);
+            $rateLine->setRateStartDate(date('Y-m-d', strtotime($formData['startDate'])));
+            $rateLine->setRateEndDate(date('Y-m-d', strtotime($formData['endDate'])));
+            
+            $rateLine->setCountryId((integer)$formData['CountryId']);
+            $rateLine->setRegionId((integer)$formData['RegionId']);
+            $rateLine->setCurrencyId((integer)$formData['Currency']);
+            $rateLine->setBasisOfCalculation($formData['basisofCalculation']);
+            if(isset($formData['d__AmountPerX']))
+            	$rateLine->setAmountPerX($formData['d__AmountPerX']);
+            if(isset($formData['d__AmountPerXValue']))
+            	$rateLine->setAmountPerXvalue($formData['d__AmountPerXValue']);
+            if(isset($formData['admittedRate']))
+            	$rateLine->setAdmittedRate($formData['admittedRate']);
+            if(isset($formData['notAdmittedRate']))
+            	$rateLine->setNonAdmittedRate($formData['notAdmittedRate']);
+            if(isset($formData['minimumValueApplies']))
+            	$rateLine->setTaxMinimum($formData['minimumValueApplies']);
+            if(isset($formData['maximumValueApplies']))
+            	$rateLine->setTaxMaximum($formData['maximumValueApplies']);
+            if(isset($formData['insuranceResidenceApplicable']))
+            	$rateLine->setInsuredResidenceApplicable($formData['insuranceResidenceApplicable']);
+            if(isset($formData['deminimisApplicable']))
+            	$rateLine->setDeMinimisApplicable($formData['deminimisApplicable']);
+            if(isset($formData['d__DeMinimis_TotalPremiumThreshold']))
+            	$rateLine->setDeMinimisTotalPremiumThreshold($formData['d__DeMinimis_TotalPremiumThreshold']);
+            if(isset($formData['d__DeMinimis_PremiumAllocationThreshold']))
+            	$rateLine->setDeMinimisPremiumAllocationThreshold($formData['d__DeMinimis_PremiumAllocationThreshold']);
+            if(isset($formData['calculateInsurLineasGroup']))
+            	$rateLine->setMultiInsuranceGroup($formData['calculateInsurLineasGroup']);
+            if(isset($formData['additionalRateId']))
+            	$rateLine->setAdditionalRateId($formData['additionalRateId']);
+            if(isset($formData['band2Admitted']))
+            	$rateLine->setBand2AdmittedRate($formData['band2Admitted']);
+            if(isset($formData['band3Admitted']))
+            	$rateLine->setBand3AdmittedRate($formData['band3Admitted']);
+            if(isset($formData['band2notAdmitted']))
+            	$rateLine->setBand2NonAdmittedRate($formData['band2notAdmitted']);
+            if(isset($formData['band3notAdmitted']))
+            	$rateLine->setBand3NonAdmittedRate($formData['band3notAdmitted']);
+            if(isset($formData['applybandproportionality']))
+            	$rateLine->setBandApplyProportionately($formData['applybandproportionality']);
+            if(isset($formData['admitted'])){
+	            if($formData['admitted']==1)
+	            	$rateLine->setAdmittedTaxPayablebyInsuredandAdministeredByInsurer('yes');
+	            else if($formData['admitted']==2)
+	            	$rateLine->setAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent('yes');
+	            else if($formData['admitted']==3)
+	            	$rateLine->setAdmittedTaxPayableByInsurer('yes');
+	            else if($formData['admitted']==4)
+	            	$rateLine->setAdmittedTaxPayableByInsuredLocally('yes');
+            }
+	        if(isset($formData['notAdmitted'])){
+		        if($formData['notAdmitted']==1)
+	            	$rateLine->setNonAdmittedTaxPayablebyInsuredandAdministeredByInsurer('yes');
+	            else if($formData['notAdmitted']==2)
+	            	$rateLine->setNonAdmittedTaxPayableByInsuredAndAdminByInsurerOrAgent('yes');
+	            else if($formData['notAdmitted']==3)
+	            	$rateLine->setNonAdmittedTaxPayableByInsurer('yes');
+	            else if($formData['notAdmitted']==4)
+	            	$rateLine->setNonAdmittedTaxPayableByInsuredLocally('yes');
+	        }
+            if(isset($formData['Multiplier1name']))
+            	$rateLine->setMultiplier1Name($formData['Multiplier1name']);
+            if(isset($formData['Multiplier1admitted']))
+            	$rateLine->setMultiplier1AdmittedRate($formData['Multiplier1admitted']);
+            if(isset($formData['Multiplier1notadmitted']))
+            	$rateLine->setMultiplier1NonAdmittedRate($formData['Multiplier1notadmitted']);
+            if(isset($formData['Multiplier2name']))
+            	$rateLine->setMultiplier2Name($formData['Multiplier2name']);
+            if(isset($formData['Multiplier2admitted']))
+            	$rateLine->setMultiplier2AdmittedRate($formData['Multiplier2admitted']);
+            if(isset($formData['Multiplier2notadmitted']))
+            	$rateLine->setMultiplier2NonAdmittedRate($formData['Multiplier2notadmitted']);
+            if(isset($formData['Multiplier3name']))
+            	$rateLine->setMultiplier3Name($formData['Multiplier3name']);
+            if(isset($formData['Multiplier3admitted']))
+            	$rateLine->setMultiplier3AdmittedRate($formData['Multiplier3admitted']);
+ 			if(isset($formData['Multiplier3notadmitted']))           
+            	$rateLine->setMultiplier3NonAdmittedRate($formData['Multiplier3notadmitted']);
+            if(isset($formData['d__DomesticTransportationElement']))
+            	$rateLine->setDomesticTransportationElement($formData['d__DomesticTransportationElement']);
+            if(isset($formData['d__NonFireElementRate']))
+            	$rateLine->setNonFireElementRate($formData['d__NonFireElementRate']);
+            if(isset($formData['layeringPercentage']))
+            	$rateLine->setLayeringPercentage($formData['layeringPercentage']);
+            if(isset($formData['d__MaltaStampDuty_Premium_Level1']))
+            	$rateLine->setMaltaPremiumLevel1StampDuty($formData['d__MaltaStampDuty_Premium_Level1']);
+            if(isset($formData['d__MaltaStampDuty_Premium_Level1_Rate']))
+            	$rateLine->setMaltaPremiumLevel1Rate($formData['d__MaltaStampDuty_Premium_Level1_Rate']);
+            if(isset($formData['d__MaltaStampDuty_Premium_Level2']))
+            	$rateLine->setMaltaPremiumLevel2StampDuty($formData['d__MaltaStampDuty_Premium_Level2']);
+            if(isset($formData['d__MaltaStampDuty_Premium_Level2_Rate']))
+            	$rateLine->setMaltaPremiumLevel2Rate($formData['d__MaltaStampDuty_Premium_Level2_Rate']);
+            if(isset($formData['d__MaltaStampDuty_Premium_Level3']))
+            	$rateLine->setMaltaPremiumLevel3StampDuty($formData['d__MaltaStampDuty_Premium_Level3']);
+            if(isset($formData['d__MaltaStampDuty_Premium_Level3_Rate']))
+           		$rateLine->setMaltaPremiumLevel3Rate($formData['d__MaltaStampDuty_Premium_Level3_Rate']);
+            if(isset($formData['between1']))
+            	$rateLine->setMinimumBand1($formData['between1']);
+            if(isset($formData['rateabove1']))
+            	$rateLine->setMaximumBand1($formData['rateabove1']);
+            if(isset($formData['between2']))
+            	$rateLine->setMinimumBand2($formData['between2']);
+            if(isset($formData['rateabove2']))
+            	$rateLine->setMaximumBand2($formData['rateabove2']);
+            if(isset($formData['between3']))
+            	$rateLine->setMinimumBand3($formData['between3']);
+            if(isset($formData['rateabove3']))
+            	$rateLine->setMaximumBand3($formData['rateabove3']);
+          
+            $result = $rateLine->saveRateLine();
+            if($result)
+                $status['status'] = true;
+            echo Zend_Json::encode($status);exit;
+            //return $result;
+            /*
+            $rateLine->setAuthorised($formData);
+            $rateLine->setEconomicArea($formData);
+            $rateLine->setTaxAdminister($formData);
+            $rateLine->setCountryId($formData['']);
+            $rateLine->setCurrencyId($formData['']);
+            $rateLine->setInsuranceClassId($formData['']);
+            $rateLine->setRegionId($formData['']);
+            $rateLine->setRateMasterId($formData['']);
+            $rateLine->setCreateDate($formData);
+            $rateLine->setModifiedDate($formData);
+            $rateLine->setRateDisplay($formData);*/
+	 	 }
+            
+            
+	 }
+         public function findratelineAction(){
+            $this->_helper->viewRenderer->setNoRender(true);
+            if ($this->_request->isPost()) {
+                $rateId = (integer)$this->_request->getParam("rateId");
+                $ratelineId = (integer)$this->_request->getParam("ratelineId");
+                if(!is_int($rateId) && !is_int($ratelineId)){
+                    throw new Exception("Invalid argument exception in edit rateline!");
+                }
+                else{
+                    $rateLine = new admin_Model_RateLine($ratelineId,$rateId);
+                    $ratelineData = $rateLine->getRateLine($rateLine);
+                    $jsonData = admin_Model_RateLine::getJson($ratelineData);          
+                    echo $jsonData;exit;
+                }
+            }
+         }
+         
+         public function deleteratelineAction(){
+            $this->_helper->viewRenderer->setNoRender(true);
+            if ($this->_request->isPost()) {
+                $resultArray = array();
+                $ratelineId = (integer)$this->_request->getParam("ratelineId");
+                $rateId = (integer)$this->_request->getParam("rateId");
+                $rateline =  new admin_Model_RateLine($ratelineId,$rateId);
+                $result = $rateline->deleteRateline($ratelineId);
+                if($result)
+                    $resultArray['message'] = "Suceessfully deleted";
+                else
+                    $resultArray['message'] = "deletion failed";
+                 echo Zend_Json::encode($resultArray);exit;
+            }
+         }
+}
+?>

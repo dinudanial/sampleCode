@@ -1,0 +1,52 @@
+<?php
+
+class admin_Model_UserUtil {
+
+    public static function getLineOfBusinesses() {
+        try {
+            $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+            $result = array();
+            $select = $db->select()
+                    ->from('LineOfBusiness', array('ID_LineOfBusiness', 'd__LineName'))
+                    ->where('s__Enabled = ?', 1);
+
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0) {
+                $result[] = '';
+                foreach ($rows as $r) {
+                    $result[$r['ID_LineOfBusiness']] = $r['d__LineName'];
+                }
+                return $result;
+            }
+            else
+                return false;
+        } catch (Zend_Db_Table_Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
+    public static function getInsurers() {
+        try {
+            $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+            $result = array();
+            $select = $db->select()
+                    ->from('QuoteInsurer', array('ID_QuoteInsurer', 'd__InsurerName'));
+
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll();
+            if (count($rows) > 0) {
+                $result[] = '';
+                foreach ($rows as $r) {
+                    $result[$r['ID_QuoteInsurer']] = $r['d__InsurerName'];
+                }
+                return $result;
+            }
+            else
+                return false;
+        } catch (Zend_Db_Table_Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+}

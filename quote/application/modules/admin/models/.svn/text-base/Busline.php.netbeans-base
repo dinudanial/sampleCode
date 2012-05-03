@@ -1,0 +1,120 @@
+<?php
+
+class admin_Model_Busline 
+{
+     private $lineName;
+     private $insuanceClass;
+     private $enabled;
+    
+     
+     public function setId($id)
+     {
+         if (!is_int($id)) {
+            throw new Exception("Invalid argument exception in setId");
+        }
+        $this->id = $id;
+     }
+     
+     public function getId()
+     {
+         return $this->id;
+     }
+
+
+     public function getlineName() {
+        return $this->lineName;
+     }
+     
+     public function setlineName($lineName)
+     {
+      
+         $this->lineName=$lineName;
+     }
+     
+     public function getinsuranceClass()
+     {
+         return $this->insuanceClass;
+     }
+     
+     public function setinsuranceClass($insuanceClass)
+     {
+        
+         $this->insuanceClass=$insuanceClass;
+     }
+     
+     public function getenabled()
+     {
+         return $this->enabled;
+     }
+     
+     public function setenabled($enabled)
+     {
+         $this->enabled=$enabled;
+     }
+     
+     public function getInsuranceClassData($insuranceClass)
+     {
+         $IC=  admin_Model_Util::getInsuranceClassData($insuranceClass);
+         $insClass=$IC['d__InsuranceClass'];
+         return $insClass;
+     }
+
+
+     public function saveBuslines(Admin_Model_Busline $busline)
+     {
+         if (null == $busline) {
+            throw new Exception('Invalid argument exception in saveBusline!');
+         }
+          
+         try {
+             
+             $buslineList=array();
+             $buslineList['d__LineName']=$busline->getlineName();
+             $buslineList['ID_InsuranceClass']=$busline->getinsuranceClass();
+             $buslineList['s__Enabled']=$busline->getenabled();
+             
+             $buslinedao=new admin_Model_BuslineDao();
+             $buslinedao->saveBusline($buslineList);
+            
+         } catch (Exception $exc) {
+             echo $exc->getMessage();
+         }
+     }
+
+      public function listBuslines()
+      {
+             $businesslines=array();
+             $buslinedao=new admin_Model_BuslineDao();
+             $buslines=$buslinedao->getBuslines();
+           
+             if($buslines)
+             {
+                 foreach($buslines as $bl)
+                 {
+                  $busline=new admin_Model_Busline();
+                  $busline->setId((integer)$bl['ID_LineOfBusiness']);
+                  $busline->setlineName($bl['d__LineName']);
+                  $busline->setinsuranceClass($bl['ID_InsuranceClass']);
+                  $busline->setenabled($bl['s__Enabled']);
+                  $busline->getinsuranceClassData($bl['ID_InsuranceClass']);
+                 array_push($businesslines, $busline);
+                  
+                 }
+          
+                 return $businesslines;
+             }
+             else
+             {
+                 echo "There is no Data to display";
+             }
+             
+      }
+      
+      
+  
+         
+    
+    
+    
+}
+

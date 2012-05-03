@@ -1,0 +1,46 @@
+<?php
+class Admin_WebnewsController extends Zend_Controller_Action {
+	public function init() {
+		 /* Initialize action controller here */
+	}
+	 public function indexAction() {
+	   $form=new admin_Form_Webnews();
+       $this->view->form=$form;
+       $news=new admin_Model_Webnews();
+       $webnewsList=$news->getWebnews();
+       $arr = array('webnews'=> $webnewsList);
+       $this->view->assign($arr);
+	 }
+	 
+	public function saveAction(){
+	 	$this->_helper->viewRenderer->setNoRender(true);
+	 	
+        if ($this->_request->isPost()) {
+	        $formData = $this->_request->getPost();
+	        $webnews=new admin_Model_Webnews();
+	        $webnews->setDate($formData['newsDate']);
+	        $webnews->setHeadLine($formData['headline']);
+	        $webnews->setContent($formData['content']);
+	        if($formData['newsid'])
+	        	$webnews->setId((integer)$formData['newsid']);
+            $status = $webnews->save($webnews);
+            if($status){
+            	$this->_redirect('admin/Webnews');
+            }
+            else {
+            	echo "Erorr";exit;
+            }
+        }    
+	}
+	public function getnewsAction(){
+		$news=new admin_Model_Webnews();
+		$newsId = $this->_request->getPost('newsId');
+		if($newsId){
+			$webnewsDetail=$news->getWebnewsDetails((integer)$newsId);
+			$json = admin_Model_Webnews::getJson($webnewsDetail);
+			echo $json;exit;
+		}
+       	
+	}
+}
+?>

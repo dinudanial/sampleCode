@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/ipt-quote.2/!svn/ver/196/trunk/application/modules/default/controllers
+END
+IndexController.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/ipt-quote.2/!svn/ver/196/trunk/application/modules/default/controllers/IndexController.php
+END
+ErrorController.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ipt-quote.2/!svn/ver/12/trunk/application/modules/default/controllers/ErrorController.php
+END
+StaticContentController.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/ipt-quote.2/!svn/ver/12/trunk/application/modules/default/controllers/StaticContentController.php
+END

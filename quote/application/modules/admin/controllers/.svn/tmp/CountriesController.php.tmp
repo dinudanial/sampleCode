@@ -1,0 +1,149 @@
+<?php
+
+class Admin_CountriesController extends Zend_Controller_Action {
+
+    public function init() {
+        /* Initialize action controller here */
+    }
+
+    public function indexAction() {
+        $r = new admin_Model_Region();
+        $regions = $r->getAllRegions();
+<<<<<<< .mine
+        $arr = array('regions' => $regions);
+=======
+        
+        $arr = array('regions'=> $regions);
+>>>>>>> .r53
+      
+        $this->view->assign($arr);
+
+        $form = new admin_Form_CountryAdd;
+        $this->view->form = $form;
+    }
+
+    public function getcountrydetailsAction() {
+
+        $this->_helper->viewRenderer->setNoRender(true);
+        if ($this->_request->isPost()) {
+            $CountryId = $this->getRequest()->getPost('countryId');
+            $Country = new admin_Model_Country();
+            $countryDetails = $Country->find((integer) $CountryId);
+            $json = admin_Model_Country::getJson($countryDetails);
+            echo $json;
+            exit;
+        }
+    }
+
+<<<<<<< .mine
+    public function savecountryAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $form = new admin_Form_CountryAdd();
+        if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+                $country = new admin_Model_Country();
+                $current = getcwd();
+                $upload = new Zend_File_Transfer_Adapter_Http();
+                $upload->setDestination($current . '/uploads/files');
+                if ($upload->isValid()) {
+                    try {
+                        if ($upload->receive()) {
+                            /* todo-- ID_user should be set */
+                            $file = new admin_Model_File();
+                            $file->setName($_FILES['doc_path']['name']);
+                            $file->setFileName($_FILES['doc_path']['name']);
+                            $file->setType($_FILES['doc_path']['type']);
+                            $file->setCountry($formData['countryid']);
+                            $file->setFileSize($_FILES['doc_path']['size']);
+                            $file->setFileType($_FILES['doc_path']['type']);
+                        } else {
+                            echo $upload->getErrors();
+=======
+
+
+
+    public function savecountryAction()
+     {
+    $this->_helper->viewRenderer->setNoRender(true);
+    $form=new admin_Form_CountryAdd();
+          if ($this->_request->isPost()) {
+               $formData = $this->_request->getPost();
+                 if ($form->isValid($formData)) {
+                        $country = new admin_Model_Country();
+          
+                        $current=  getcwd();
+                        
+                        $upload = new Zend_File_Transfer_Adapter_Http();              
+                        $upload->setDestination($current.'/uploads/files');
+                        try{
+                              if($upload->receive())
+                              {
+                                  /* todo-- ID_user should be set */
+                                  $file=new admin_Model_File();
+                                  $file->setName($_FILES['doc_path']['name']);
+                                  $file->setFileName($_FILES['doc_path']['name']);
+                                  $file->setType($_FILES['doc_path']['type']);
+                                  $file->setCountry($formData['countryid']);
+                                  $file->setFileSize($_FILES['doc_path']['size']);
+                                  $file->setFileType($_FILES['doc_path']['type']);
+                                  $country->setFile($file);
+                                  
+                              }
+                              else
+                              {
+                                  echo $upload->getErrors();
+                              }
+>>>>>>> .r53
+                        }
+<<<<<<< .mine
+                    } catch (Zend_File_Transfer_Exception $e) {
+                        $e->getMessage();
+                    }
+                }
+=======
+                        catch (Zend_File_Transfer_Exception $e){
+                            $e->getMessage();
+                        }
+                     
+                        $country->setId((integer)$formData['countryid']);     
+                        $country->setCountry($formData['name']);
+                        $country->setAuthorised($formData['autherised']);
+                        $country->setAdmittedType($formData['admitted_type']);
+                        $country->setStandingDataApplicable((boolean)$formData['sendingDataApplicable']);
+                        $country->setAdmittedEntry($formData['defaultAdmittedEntry']);
+                        $country->setResidencePullDown((boolean)$formData['residenceDropDown']);
+                        $country->setLockAdmitted((boolean)$formData['lockAdmitted']);
+                        $country->setLpan((boolean)$formData['lpan']);
+                        $country->setCommentary($formData['countrycommentary']);
+                  
+                        $resultArray=$country->save($country);
+                        $this->_forward('index','countries','admin');                        
+                              
+               } else {
+                     $form->populate($formData);
+               }
+         }
+>>>>>>> .r53
+
+                $country->setId((integer) $formData['countryid']);
+                $country->setCountry($formData['name']);
+                $country->setAuthorised($formData['autherised']);
+                $country->setAdmittedType($formData['admitted_type']);
+                $country->setStandingDataApplicable((boolean) $formData['sendingDataApplicable']);
+                $country->setAdmittedEntry($formData['defaultAdmittedEntry']);
+                $country->setResidencePullDown((boolean) $formData['residenceDropDown']);
+                $country->setLockAdmitted((boolean) $formData['lockAdmitted']);
+                $country->setLpan((boolean) $formData['lpan']);
+                $country->setCommentary($formData['countrycommentary']);
+                $country->setFile($file);
+                $resultArray = $country->save($country);
+                $this->_forward('index', 'countries', 'admin');
+            } else {
+                $form->populate($formData);
+            }
+        }
+    }
+
+}
+

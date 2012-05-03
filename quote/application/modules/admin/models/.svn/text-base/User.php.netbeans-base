@@ -1,0 +1,16 @@
+<?php
+
+class admin_Model_User
+{
+
+    public function __construct() {
+        
+    }
+    
+    public function saveCountry() {
+        $country = new admin_Model_CountryDao();
+       // $country->save();
+        return 12;
+    }
+}
+

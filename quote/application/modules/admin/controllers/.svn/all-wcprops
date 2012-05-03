@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/ipt-quote.2/!svn/ver/361/trunk/application/modules/admin/controllers
+END
+TutorialsController.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/ipt-quote.2/!svn/ver/254/trunk/application/modules/admin/controllers/TutorialsController.php
+END
+IndexController.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ipt-quote.2/!svn/ver/255/trunk/application/modules/admin/controllers/IndexController.php
+END
+WebnewsController.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/ipt-quote.2/!svn/ver/336/trunk/application/modules/admin/controllers/WebnewsController.php
+END
+CurrencyController.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/ipt-quote.2/!svn/ver/361/trunk/application/modules/admin/controllers/CurrencyController.php
+END
+CountriesController.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/ipt-quote.2/!svn/ver/299/trunk/application/modules/admin/controllers/CountriesController.php
+END
+RateController.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/ipt-quote.2/!svn/ver/331/trunk/application/modules/admin/controllers/RateController.php
+END
+ReportController.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ipt-quote.2/!svn/ver/254/trunk/application/modules/admin/controllers/ReportController.php
+END
+IptController.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/ipt-quote.2/!svn/ver/254/trunk/application/modules/admin/controllers/IptController.php
+END
+QuotesController.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ipt-quote.2/!svn/ver/254/trunk/application/modules/admin/controllers/QuotesController.php
+END
+StaticContentController.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/ipt-quote.2/!svn/ver/12/trunk/application/modules/admin/controllers/StaticContentController.php
+END
+RatelineController.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/ipt-quote.2/!svn/ver/281/trunk/application/modules/admin/controllers/RatelineController.php
+END
+BuslinesController.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/ipt-quote.2/!svn/ver/340/trunk/application/modules/admin/controllers/BuslinesController.php
+END

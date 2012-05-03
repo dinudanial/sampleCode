@@ -1,0 +1,799 @@
+$(function(){
+    $("#accordion").accordion({
+        header: "h3",
+        autoHeight: false,
+        collapsible: true,
+        active: false
+    });
+    // Dialog Box for country		
+    $('#dialog').dialog({
+        autoOpen: false,
+        width: 800,
+        
+        buttons: {
+            "Ok": function() { 
+                
+                  
+                           $("#addCountry").validate({
+                               rules: {
+                                  name: {
+                                     required: true
+                                 }
+                               },
+                               messages: {
+                                  name: {
+                                     required: "Please Provide the name of the Country"
+                                    
+                                  }
+                              }
+                           });
+                           $("#addCountry").submit();
+                	 
+
+            }, 
+            "Cancel": function() { 
+                $(this).dialog("close"); 
+            } 
+        }
+          
+    });
+       //Dialog Boxes
+       $('#busline_dialog').dialog({
+            autoOpen: false,
+            width: 800,
+            buttons: {
+                "Ok": function() { 
+                	
+                      $("#saveBusline").validate({
+                         rules: {
+                            lineName: {
+                               required: true
+                            },
+                            insuranceclass:{
+                               required:function(element)
+                            {
+                                
+                                 if( $("#insuranceclass").attr('selectedindex') == -1){
+                                     return  true;
+                                 }else{
+                                     return false;
+                                 }
+                            }
+                             
+                            }
+                              
+                         },
+                         messages: {
+                                lineName: {
+                                     required: "Please Provide the name for the business"
+                                },
+                                insuranceclass:{
+                                    required: "Please Select the Insurance Class"
+                                }
+                         }
+                      });
+                      $("#saveBusline").submit();
+                }, 
+                "Cancel": function() { 
+                    $(this).dialog("close"); 
+                } 
+            }
+          
+        });
+ 
+      
+       
+         $(".deleterow").click(function(event){
+              event.preventDefault();
+             
+             var BuslineId = $(this).attr('id');
+               if(BuslineId){
+    		 if(confirm("Do you want to delete Business line?")){
+    			  $.post(baseUrl+"/admin/Buslines/deletebusline",{
+                   buslineId:BuslineId
+                  },function($data){
+                           window.location.href=baseUrl+"/admin/Buslines"; 
+                  });
+                  
+    		 }
+    	 }
+    	 else{
+    		 console.log("Erorr");
+    	 }
+           
+         
+                 
+         });
+        
+         $(".editrow").die("click");
+         $(".editrow").live("click",function(){
+            clearFormData();
+              var BuslineId = $(this).attr('id');
+          
+          $.post(baseUrl+"/admin/Buslines/getbuslinedetails",{
+              buslineId:BuslineId
+          },function($data){
+              
+             $('#lineName').attr("value",$data.LineName);
+             if($data.enabled==1)
+                 {
+                     $('#enabled').attr("checked","checked");
+                 }
+                 else
+                     {
+                         $("#enabled").removeAttr("checked");
+                     }
+            
+             $("#insuranceclass").attr("value",$data.insuranceClass);
+             $("#hiddenid").attr("value",$data.id);
+            
+          },"json");
+          
+          $("#busline_dialog").dialog('open');
+          return false;
+         });
+
+				
+/**************************************************************************************************************************
+ * Country 
+ * 
+ **************************************************************************************************************************/
+    
+    $('.dialog_link').click(function(){
+        var CountyId=$(this).parent().parent().attr('id');
+        $("#countryid").attr("value",CountyId);
+        $.post(baseUrl+"/admin/Countries/getcountrydetails",{
+            countryId:CountyId
+        },function($data){
+            $("#name").attr("value",$data.country);
+            $("#autherised").attr("value",$data.authorised);
+
+            if($data.standingDataApplicable==true)
+            {
+                $("#sendingDataApplicable").attr("checked","checked");
+            }
+            else{
+            	$("#sendingDataApplicable").removeAttr("checked")
+            }
+            if($data.admittedType==0)
+            {
+                $("#admitted_type-0").attr("checked","checked");
+            }
+            else if($data.admittedType==1)
+            {
+                $("#admitted_type-1").attr("checked","checked");
+            }
+            else if($data.admittedType==null){
+            	$("#admitted_type-0").removeAttr("checked");
+            	$("#admitted_type-1").removeAttr("checked");
+            }
+            if($data.admittedType==0){
+            	$("#defaultAdmittedEntry1").addClass('adminttedentryhide').removeClass('adminttedentryshow');
+            	$("#defaultAdmittedEntry").addClass('adminttedentryshow').removeClass('adminttedentryhide');
+                $("#defaultAdmittedEntry").attr("value",$data.admittedEntry);
+            }  
+            else if($data.admittedType==1){
+                $("#defaultAdmittedEntry1").addClass('adminttedentryshow').removeClass('adminttedentryhide');
+                $("#defaultAdmittedEntry").addClass('adminttedentryhide').removeClass('adminttedentryshow');
+                $("#defaultAdmittedEntry1").attr("value",$data.admittedEntry);
+            }
+            else if($data.admittedType==null){
+            	if($data.admittedEntry=="Yes/FOS"){
+            		$("#defaultAdmittedEntry1").addClass('adminttedentryshow').removeClass('adminttedentryhide');
+                    $("#defaultAdmittedEntry").addClass('adminttedentryhide').removeClass('adminttedentryshow');
+            		$("#defaultAdmittedEntry1").attr("value",$data.admittedEntry);
+            	}
+            	else{
+            		$("#defaultAdmittedEntry1").addClass('adminttedentryhide').removeClass('adminttedentryshow');
+                	$("#defaultAdmittedEntry").addClass('adminttedentryshow').removeClass('adminttedentryhide');
+                    $("#defaultAdmittedEntry").attr("value",$data.admittedEntry);
+            	}
+            }
+            
+            	  
+            if($data.residencePullDown==true)
+            {
+                $('#residenceDropDown').attr("checked","checked");
+            }
+            else{
+            	 $('#residenceDropDown').removeAttr("checked","checked");
+            }
+            if($data.lockAdmitted==true)
+            {
+                $('#lockAdmitted').attr("checked","checked");
+            }
+            else{
+           	 	$('#lockAdmitted').removeAttr("checked","checked");
+           }
+            if($data.LPAN==true)
+            {
+                $('#lpan').attr("checked","checked");
+            }
+            else{
+           	 	$('#lpan').removeAttr("checked","checked");
+           }
+            $("#countrycommentary").text($data.countryCommentary);
+                
+           
+            
+        },"json");
+        
+         $('#dialog').dialog('open');
+        return false;
+    //Admitted Type change    busline_dialog
+            
+    });
+    
+  
+    
+ /**************************************************************************************************************************
+ * Busline 
+ * 
+ **************************************************************************************************************************/
+    
+        
+        $('.busline_dialoglink').click(function(){
+             clearFormData();
+             $('#busline_dialog').dialog('open');
+             return false;
+        });
+				
+    //hover states on the static widgets
+    $('#dialog_link, ul#icons li').hover(
+        function() {
+            $(this).addClass('ui-state-hover');
+        }, 
+        function() {
+            $(this).removeClass('ui-state-hover');
+        }
+        );
+
+    
+        //Change of admitted type in country page
+        $('input[name=admitted_type]').click(function(){
+        	var value =	$(this).val();
+        	if(value==0){
+        	   $("#defaultAdmittedEntry1").removeClass('adminttedentryshow').addClass('adminttedentryhide');
+        	   $("#defaultAdmittedEntry").removeClass('adminttedentryhide').addClass('adminttedentryshow');
+         	   $("#defaultAdmittedEntry").attr("value",'Yes');
+        	}
+        	if(value==1){
+        	   $("#defaultAdmittedEntry").removeClass('adminttedentryshow').addClass('adminttedentryhide');
+        	   $("#defaultAdmittedEntry1").addClass('adminttedentryshow').removeClass('adminttedentryhide');
+         	   $("#defaultAdmittedEntry1").attr("value",'Yes/FOS');
+        	}
+        });
+
+/**************************************************************************************************************************
+ * Rate Page and Rate line
+ * 
+ **************************************************************************************************************************/
+
+        
+        
+      //Dialog box for RateLine
+       $("#rateLineDialog").dialog({
+            autoOpen: false,
+            width: 800,
+            buttons: {
+                "Ok": function() { 
+	            	if($("#endDate").attr("value")==''){
+	            		alert('Please select end Date!');
+	            	}
+	            	else{
+	            		$("#rateLine").submit();
+	             	    $(this).dialog("close")
+	            	}
+                }, 
+                "Cancel": function() { 
+                    $(this).dialog("close"); 
+                } 
+            }
+        });
+       
+       //Dialog for default subclass/tertiary
+       $("#subclassDialog").dialog({
+           autoOpen: false,
+           width: 800,
+           buttons: {
+               "Ok": function() { 
+	            	
+               }, 
+               "Cancel": function() { 
+                   $(this).dialog("close"); 
+               } 
+           }
+       });
+       
+      /*Change of Region in rate page
+       * CreatedBy Anoop A
+       */
+      $('#regioncontrol').change(function(){
+    	  var RegionId=$(this).val();  
+          $.post(baseUrl+"/admin/Rate/getcountrylist",{regionid:RegionId},function($data){
+        	  $("#country").children().remove();
+              $("#country").append('<option value=""></option>');
+              $.each($data, function(index, value){
+            	  $("#country").append('<option value="'+value.ID_Country+'">'+value.d__CountryName+'</option>');
+               });
+          },"json");
+              
+        });
+      
+      //deminimisApplicable check box click
+      $("#deminimisApplicable").click(function(){
+    	  if($("#deminimisApplicable").is(':checked'))
+    	  {
+        	  $("#d__DeMinimis_TotalPremiumThreshold-label").parent().show();
+        	  $("#d__DeMinimis_PremiumAllocationThreshold-label").parent().show();
+          }
+          else{
+        	  $("#d__DeMinimis_TotalPremiumThreshold-label").parent().hide();
+        	  $("#d__DeMinimis_PremiumAllocationThreshold-label").parent().hide();
+          }
+      });
+      //set date picker for rate line start date
+      $( "#startDate" ).datepicker({
+    	  	showOn: "button",
+    	  	dateFormat:'mm/dd/yy',
+			showButtonPanel: true,
+			buttonImage: baseUrl+"/img/calendar.gif",
+			buttonImageOnly: true
+		});
+      //set date picker for rate line end date
+      $( "#endDate" ).datepicker({
+			showOn: "button",
+			dateFormat:'mm/dd/yy',
+			showButtonPanel: true,
+			buttonImage: baseUrl+"/img/calendar.gif",
+			buttonImageOnly: true
+		});
+      
+    
+       /*Show button click in Rate page
+        * Created By:Anoop A
+        */
+       $('#show').click(function(){
+    	   $regionId = 	$('#regioncontrol').attr('value');
+    	   $countryId = $('#country').attr('value');
+    	   if($regionId==''){
+    		   console.log("Region can not be empty!");
+    	   }
+    	   else if($countryId==''){
+    		   console.log("Country can not be empty!");
+    	   }
+    	   else{
+    		   $masterId =	$('#masterid').attr('value');
+    		   $insurClass = $('#insuranceclass').attr('value');
+    		   //$dataIssue = $('#dataissue').attr('checked');$('#isOther:checked').val();
+    		   $dataIssue = $('#dataissue:checked').val();
+        	   $.post(baseUrl+"/admin/Rate/getratelist",
+        			   {region:$regionId,country:$countryId,rateId:$masterId,insuranceClass:$insurClass,dataIssue:$dataIssue},
+        			   function($data){
+        				 if(!$data.erorr){
+        					 var $htmlContent	='';
+	           				 var rateLength=$data.length;
+	           				 $htmlContent+='<table cellpadding=0 cellspacing=0 width="100%" id="test">';
+	           				 $.each($data, function(index, value){
+	           					var obj = jQuery.parseJSON(value);
+	           					$htmlContent+='<tr id="'+obj.id+'"><td  width="5%">'+obj.id+'</td>';
+	           					$htmlContent+='<td width="20%" class="editRate">'+obj.countryName+'</td>';
+	           					$htmlContent+='<td width="20%" class="editRate">'+obj.insuranceClassName+'</td>';
+	           					$htmlContent+='<td width="20%" class="editRate">'+obj.taxType+'</td>';
+	           					$htmlContent+='<td width="15%" class="editRate">'+obj.taxSubClass+'</td>';
+	           					$htmlContent+='<td width="10%" class="editRate">'+obj.tertiry+'</td>';
+	           					var $defaultSubClass = '';
+	           					if(obj.defaultSubClass!=0)$defaultSubClass = obj.defaultSubClass;
+	           					$htmlContent+='<td width="7%" class="editRate">'+$defaultSubClass+'</td>';
+	           					$htmlContent+='<td width="3%"><a href="#">Delete</td></tr>';
+	           				 });
+	           				 $htmlContent+='</table>';
+	           				 $("#rateTd").html($htmlContent) ;
+	           				 if(!$masterId)
+	           					$masterId=0;
+	           				 if($dataIssue == undefined)
+	           					$dataIssue=0;
+	           				 $("#addAndDownload").html('<a href="#" id="newRate">Add Rate</a> || <a href="'+baseUrl+"/admin/rate/report/countryid/"+$countryId+"/regionid/"+$regionId+"/masterid/"+$masterId+"/insuranceClass/"+$insurClass+"/dataIssue/"+$dataIssue+'">Download Found Rate in Excel</a>');
+        				 }else{
+        					 $("#rateTd").html("No rates found!")
+        				 }
+        				  
+        				   
+        	   },"json");
+    	   } 
+    	   
+       });
+       
+       /*Rate save 
+        * Created By:Anoop A
+       */
+       $("#save").click(function(){
+    	   $("#addRate").validate();
+    	   $taxType =	$("#taxType").attr("value");
+    	   $rateId =	$("#masterRateId").attr("value");
+    	   $countryId =	$("#newRatecountry").attr("value");
+    	   $insuranceClass = $("#newRateinsuranceclass").attr('value');
+    	   if($countryId=='')
+    		   alert("Please select a Country!");
+    	   else if($insuranceClass=='')
+    		   alert("Please select an Insurance Class!");
+    	   else if($taxType=='')
+    		   alert("Please select a type of tax!");
+    	   else{
+    			 //$("#addRate").submit();
+    		   
+    		   $.post(baseUrl+"/admin/Rate/save",$("#addRate").serialize(),function($data){
+    			   if($data){
+    				   console.log($data.status);
+    				   if($data.status=='new'){
+    					   
+    				   }
+    				   else{
+    					   $('#ratePage').removeClass('rateshow').addClass('ratehidden');
+      	    	    	   $('#rateList').removeClass('ratehidden').addClass('rateshow');
+    				   }
+    			   }
+    			   else{
+    				   console.log("Erorr");
+    			   } 
+        	   },"json");
+    	   }
+       });
+       
+       /*New Rate event bind
+        * Created By:Anoop A
+        */
+       $("#newRate").die("click");
+       $("#newRate").live("click",function(){
+    	   $('#rateList').removeClass('rateshow').addClass('ratehidden');
+    	   $('#ratePage').removeClass('ratehidden').addClass('rateshow');
+    	   clearRateForm();
+       });
+       
+       $(".editRate").die("click");
+       $(".editRate").live("click",function(){
+    	   $id = $(this).parent().attr("id");
+    	   if($id){
+    		   $('#rateList').removeClass('rateshow').addClass('ratehidden');
+        	   $('#ratePage').removeClass('ratehidden').addClass('rateshow');
+         	   $.post(baseUrl+"/admin/rate/rateedit",{rateId:parseInt($id)},function($data){
+         		   if($data){
+         			  $("#masterRateId").attr("value",$data.id);
+         			  $("#taxType").attr("value",$data.taxType);
+                      $("#newRateRegion").attr("value",$data.region);
+                      if($data.country){
+                    	  $.post(baseUrl+"/admin/Rate/getcountrylist",{regionid:$data.region},function($countrydata){
+                        	  $("#newRatecountry").children().remove();
+                              $("#newRatecountry").append('<option value=""></option>');
+                              $.each($countrydata, function(index, value){
+                            	  $("#newRatecountry").append('<option value="'+value.ID_Country+'">'+value.d__CountryName+'</option>');
+                               });
+                              $("#newRatecountry").attr("value",$data.country);
+                          },"json");
+                      }
+                      $("#currency").attr("value",$data.currency);
+                      $("#newRateinsuranceclass").attr("value",$data.insuranceClass);
+                      $("#taxSubClass").attr("value",$data.taxSubClass);
+                      $("#tertiary").attr("value",$data.tertiry);
+                      $("#defaultSubclasOrTertiary").attr("value",$data.defaultSubClass);
+                      if($data.autoCreate==1) 
+                    	  $("#noAutoCreate").attr("checked","checked");
+                      else
+                    	  $("#noAutoCreate").attr("checked","unchecked");
+         		   }else{
+         			   console.log("No data!");
+         		   }
+         		   
+         	   },"json");
+    	   }
+    	   else{
+    		   alert("Erorr!");
+    	   }
+    	   
+       });
+       
+       /*Change of Region in Newrate dialog page
+        * Created By:Anoop A
+        */
+       $('#newRateRegion').change(function(){
+     	  var RegionId=$(this).val(); 
+          $.post(baseUrl+"/admin/Rate/getcountrylist",{regionid:RegionId},function($data){
+         	  $("#newRatecountry").children().remove();
+              $("#newRatecountry").append('<option value=""></option>');
+              $.each($data, function(index, value){
+             	  $("#newRatecountry").append('<option value="'+value.ID_Country+'">'+value.d__CountryName+'</option>');
+              });
+          },"json");   
+        });
+       /*Default Subclass / Tertiary envent bind
+        * Created  By:Anoop A
+        */
+       $("#defaultSubclasOrTertiary").click(function(){
+    	   $taxType =	$("#taxType").attr("value");
+    	   $countryId =	$("#newRatecountry").attr("value");
+    	   $insuranceClass = $("#newRateinsuranceclass").attr('value');
+    	   if($countryId=='')
+    		   alert("Please select a Country!");
+    	   else if($insuranceClass=='')
+    		   alert("Please select an Insurance Class!");
+    	   else if($taxType=='')
+    		   alert("Please select a type of tax!");
+    	   else{
+    		   $rateId = $("#masterRateId").attr("value");
+    		   $currency = $("#currency").attr("value");
+    		   $country = $("#newRatecountry").attr("value");
+    		   $typeofTax =	$("#taxType").attr("value");
+    		   $insuranceClass = $("#newRateinsuranceclass").attr("value");
+    		   $taxSubclass = $("#taxSubClass").attr("value");
+    		   $htmlcontent = '';
+    		   
+                   $.post(baseUrl+"/admin/rate/defaultsubclass",{rateId:$rateId,currency:$currency
+                            ,country:$country,typeOftax:$typeofTax,insuranceClass:$insuranceClass},function($data){
+                        if($data){
+                                $htmlcontent = '<div id="defaultbutton"><input type="button" name="removedefaultrate" value="Remove default rate"/></div>';
+                                //$htmlcontent+= '<>';
+                                $countryFlag = 1;
+                                $subclassFlag = 0;
+                                $.each($data,function(index,value){
+                                        $object =jQuery.parseJSON(value);
+                                        if($object.defaultSubclass){
+                                            $("#defaultSubClassHidden").attr("value",$object.defaultSubclass+","+$object.rateMasterId);
+                                        }
+                                        if($countryFlag == 1){
+                                            $htmlcontent+= '<div>Country '+$object.country+'</div>';
+                                            $htmlcontent+= '<div>Insurance '+$object.insuranceclass+'</div>';
+                                            $htmlcontent+= '<div>Type Of Tax '+$object.typeOfTax+'</div>';
+                                            $htmlcontent+= '<div><p>Subclass</p></div>';
+                                            $countryFlag = 0;
+                                        }
+                                        if($object.taxSubclass)
+                                            $subclassFlag = 1;
+                                        else
+                                            $subclassFlag = 0;
+                                        $htmlcontent+= '<div>'+$object.taxSubclass+'('+$object.rateMasterId+')'+'<span class="defaultSubClass" id="'+$object.rateMasterId+'">MakeDefault</span></div>';
+
+                                });
+                                if($subclassFlag==0){    
+                                    $("#ratedefaultsubclass").html("<p>No active rates defined for this subclass!</p>");
+                                }
+                                else
+                                    $("#ratedefaultsubclass").html($htmlcontent);
+                        }
+                        else{
+                            $("#ratedefaultsubclass").html("Data Erorr!");
+                        }
+                    },"json");
+    		   	   
+    	   }
+    	   	 //Dialog box for Default subclass
+	    	 $("#subclassDialog").dialog("open");	
+       });
+       
+       //Default subclass setting
+       $(".defaultSubClass").die("click");
+       $(".defaultSubClass").live("click",function(){
+           var $rateId = $(this).attr("id");
+           var $defaultSubclass = $("#defaultSubClassHidden").attr("value");
+           console.log("Default"+$defaultSubclass);
+           $.post(baseUrl+"/admin/rate/saveDefaultSubClas",{rateId:$rateId,subClass:$defaultSubclass},function($data){
+               
+           },'json');
+       });
+     
+       
+       $("#addNewRateLine").die("click");
+       $("#addNewRateLine").live("click",function(){
+    	   $rateId = $("#masterRateId").attr("value");
+    	   $countryId = $("#newRatecountry").attr("value");
+    	   $currency = $("#currency").attr("value");
+    	   $region = $("#newRateRegion").attr("value");
+    	   $("#MasterRateId").attr("value",$rateId);
+		   $("#CountryId").attr("value",$countryId);
+		   $("#RegionId").attr("value",$region);
+		   $("#Currency").attr("value",$currency);
+		   console.log("rate"+$rateId);
+		   if($rateId){
+			   console.log("inside");
+			   displayRateLineForm('1');
+		   }
+		   else{
+			   console.log("Out side");
+			   displayRateLineForm('0');
+		   }
+//    	   if($("#masterRateId").attr("value")== 'new'){
+//    		   displayRateLineForm('0');
+//    	   }
+//    	   else{
+//    		   displayRateLineForm('1');
+//    	   }
+    	   $("#rateLineDialog").dialog("open");
+       });
+       
+      $(".autherise").die("click");
+        $(".autherise").live("click",function(event){
+            event.preventDefault();
+            var BuslineId = $(this).attr('id');
+            
+            $.post(baseUrl+"/admin/Buslines/changestatus",{buslineId:BuslineId},function($data){
+                  if($data==0)
+                      {
+             
+                         $(".autherise[id='"+BuslineId+"']").html("<a class='status'>Disable</a>");
+                        
+                      }
+                  else
+                      {
+                         
+                         $(".autherise[id='"+BuslineId+"']").html("<a class='status'>Enable</a>");
+                        
+                      }
+              },"json");
+        
+            
+       });
+       
+       $("#insuranceclassselect").change(function(){
+            var InsuranceId=$(this).val();
+            var $htmlContent = "";
+            $.post(baseUrl+"/admin/Buslines/sortbyinsurance",{insuranceId:InsuranceId},function($data){
+               $htmlContent="<table width='100%' cellpadding='0' cellspacing='0' class='table'>";
+               $htmlContent+="<tr><th>Line of Business</th><th>Insurance Class</th><th>Status</th></tr>";
+               $.each($data,function(index,value)
+               {
+                  var obj = jQuery.parseJSON(value);
+                
+                  $htmlContent+="<tr>";
+                  $htmlContent+="<td class='editrow' id="+obj.id+"><a href=''>"+obj.LineName+"</a></td>";
+                  $htmlContent+="<td class='editrow' id="+obj.id+">"+obj.insuranceClass+"</td>";
+                  $htmlContent+="<td class='autherise' id="+obj.id+">";
+                  if(obj.enabled==1)
+                     $htmlContent+="<a href=''>Enable</a>";
+                  else
+                     $htmlContent+="<a href=''>Disable</a></td></tr>";
+                 
+               });
+               $htmlContent+="</table>";
+               $("#buslines").html($htmlContent);
+            },"json");
+       });
+       
+       //Basic calculation change
+       $("#basisofCalculation").change(function(){
+    	  var $calculationId =  $("#basisofCalculation").attr("value");
+    	  if($calculationId){
+    		  displayRateLineForm($calculationId);
+    	  }
+    	  else{
+    		  console.log("Erorr");
+    	  }
+       });
+  /*#################################################################################
+   * Web News
+   *#################################################################################*/
+       
+      //Dialog box for webnews
+      $("#webnews_dialog").dialog({
+           autoOpen: false,
+           width: 600,
+           buttons: {
+               "Ok": function() { 
+            	   $("#webnewsForm").validate();
+            	   $("#webnewsForm").submit();
+            	  // $(this).dialog("close")
+
+               }, 
+               "Cancel": function() { 
+                   $(this).dialog("close"); 
+               } 
+           }
+       });
+       
+       $("#addWebNews").die("click");
+       $("#addWebNews").live("click",function(event){
+    	   event.preventDefault();
+    	   clearnews();
+    	   $('#webnews_dialog').dialog('open');
+           return false;
+       });
+       $(".editNews").click(function(){
+    	 $newsId = $(this).parent().attr("id");
+    	 if($newsId){
+    			$.post(baseUrl+"/admin/Webnews/getnews",{newsId:$newsId},function($data){
+    				if($data){
+    					 clearnews();
+    					 $("#newsid").attr("value",$data.id);
+    					 $("#newsDate").attr("value",$data.date);
+    				     $("#headline").attr("value",$data.headline);
+    				     $("#content").attr("value",$data.content);
+    				     $('#webnews_dialog').dialog('open');
+    				     
+    			           //return false;
+    				}
+    				else{
+    					console.log("No data!");
+    				}
+    			},"json") ;
+    	}
+    	else{
+    		 alert("Erorr");
+    		}
+       });
+       
+       $( "#newsDate" ).datepicker({
+			showOn: "button",
+			showButtonPanel: true,
+			buttonImage: baseUrl+"/img/calendar.gif",
+			buttonImageOnly: true
+		});
+       
+       $(".deleteNews").click(function(){
+    	 $newsId = parseInt($(this).parent().parent().attr("id"));
+    	 if($newsId){
+    		 if(confirm("Do you want to delete webnews?")){
+    			 $.post(baseUrl+"/admin/webnews/deletenews",{newsId:$newsId},function($data){
+    				 if($data){
+    					 window.location.href = baseUrl+"/admin/Webnews/index/msg/"+$data.msg; 
+    				 }
+    				 else{
+    					 console.log("Data erorr!");
+    				 }
+    			 },"json");
+    		 }
+    	 }
+    	 else{
+    		 console.log("Erorr");
+    	 }
+       });     
+       
+  //Create quote date set
+   $( "#d__Date" ).datepicker({
+        showOn: "button",
+        dateFormat:'mm/dd/yy',
+        showButtonPanel: true,
+        buttonImage: baseUrl+"/img/calendar.gif",
+        buttonImageOnly: true
+    });
+    
+     $( "#d__EffectiveDate" ).datepicker({
+        showOn: "button",
+        dateFormat:'mm/dd/yy',
+        showButtonPanel: true,
+        buttonImage: baseUrl+"/img/calendar.gif",
+        buttonImageOnly: true
+    });
+       
+});
+ 
+    
+ function clearFormData()
+    {
+        $("#lineName").attr("value","");
+        $("#insuranceclass").attr("value","");
+        $("#insuranceclass").attr('selectedIndex', '-1').children("option:selected").removeAttr("selected");  
+        $("#enabled").removeAttr("checked");
+        $(".error").html("");
+        
+    }
+
+
+ function clearnews(){
+	 $("#newsid").attr("value","");
+	 $("#newsDate").attr("value","");
+     $("#headline").attr("value","");
+     $("#content").attr("value","");
+ }
+
+ function clearRateForm(){
+	 $("#masterRateId").attr("value","new");
+	 $("#taxType").attr("value","");
+     $("#newRateRegion").attr('selectedIndex', '-1').children("option:selected").removeAttr("selected");
+     $("#newRatecountry").attr('selectedIndex', '-1').children("option:selected").removeAttr("selected");
+     $("#currency").attr('selectedIndex', '-1').children("option:selected").removeAttr("selected");
+     $("#newRateinsuranceclass").attr('selectedIndex', '-1').children("option:selected").removeAttr("selected");
+     $("#taxSubClass").attr("value","");
+     $("#tertiary").attr("value","");
+     $("#defaultSubclasOrTertiary").attr("value","");
+     $("#noAutoCreate").removeAttr("checked");
+     $("#enabled").removeAttr("checked");
+     
+ }

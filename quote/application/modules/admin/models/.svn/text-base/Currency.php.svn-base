@@ -1,0 +1,259 @@
+<?php
+
+class admin_Model_Currency
+{
+   private $currencyName;
+   private $currencyCode;
+   private $currencySymbol;
+   private $currencySymbolHTML;
+   private $paddingCharacter;
+   private $symbolPosition;
+   private $priority;
+   private $currencyId;
+   private $baseRate;
+
+
+
+
+   public function setCurrencyName($currencyName)
+   {
+       $this->currencyName=$currencyName;
+   }
+   
+   public function getCurrencyName()
+   {
+       return $this->currencyName;
+   }
+   
+   public function setCurrencyCode($currencyCode)
+   {
+       $this->currencyCode=$currencyCode;
+   }
+   
+   public function getCurrencyCode()
+   {
+       return $this->currencyCode;
+   }
+   
+   public function setCurrencySymbol($currencySymbol)
+   {
+       $this->currencySymbol=$currencySymbol;
+   }
+   
+   public function getCurrencySymbol()
+   {
+       return $this->currencySymbol;
+   }
+   
+   public function setCurrencySymbolHTML($currencySymbolHTML)
+   {
+       $this->currencySymbolHTML=$currencySymbolHTML;
+   }
+   
+   public function getCurrencySymbolHTML()
+   {
+       return $this->currencySymbolHTML;
+   }
+   
+   public function setPaddingCharecter($paddingCharacter)
+   {
+       $this->paddingCharacter=$paddingCharacter;
+   }
+   
+   public function getPaddingCharacter()
+   {
+       return $this->paddingCharacter;
+   }
+   
+   public function setSymbolPossition($symbolPosition)
+   {
+       $this->symbolPosition=$symbolPosition;
+   }
+   
+   public function getSymbolPossition()
+   {
+       return $this->symbolPosition;
+   }
+   
+   public function setPriority($priority)
+   {
+       $this->priority=$priority;
+   }
+   
+   public function getPriority()
+   {
+       return $this->priority;
+   }
+   
+   public function setCurrencyId($currencyId)
+   {
+       if (!is_int($currencyId)) {
+            throw new Exception("Invalid argument exception in setCurrency");
+        }
+       $this->currencyId=$currencyId;
+   }
+   
+   public function getCurrencyId()
+   {
+       return $this->currencyId;
+   }
+   
+   public function setBaseRate($baseRate)
+   {
+       $this->baseRate=$baseRate;
+   }
+   
+   public function getBaseRate()
+   {
+       return $this->baseRate;
+   }
+
+
+   public function saveCurrency(admin_Model_Currency $currency)
+   {
+       $currencies=  $this->getArray($currency);
+       $CurrencyDao=new admin_Model_CurrencyDao();
+       $CurrencyDao->save($currencies);
+   }
+   
+   public function editCurrency(admin_Model_Currency $currency)
+   {
+       try {
+            $currencies= $this->getArray($currency);
+          
+            $currencyId=$currency->getCurrencyId();
+            $currencyDao=new admin_Model_CurrencyDao();
+            $currencyDao->updateCurrency($currencies,$currencyId);
+       } catch (Exception $exc) {
+           echo $exc->getMessage();
+       }
+   }
+   
+   public function getArray(admin_Model_Currency $currency)
+   {
+       
+      $currencies=array();
+    
+      $currencies['d__CurrencyName']=$currency->getCurrencyName();
+      $currencies['d__CurrencyCode']=$currency->getCurrencyCode();
+      $currencies['d__CurrencySymbol']=$currency->getCurrencySymbol();
+      $currencies['d__CurrencySymbolHTML']=$currency->getCurrencySymbolHTML();
+      $currencies['d__CurrencySymbolPosition']=$currency->getSymbolPossition();
+      if($currency->getBaseRate()==1)
+          $currencies['d__BaseRate']="Yes";
+      else
+          $currencies['d__BaseRate']="No";
+      
+      
+      $currencies['d__Priority']=$currency->getPriority();
+      $currencies['d__CurrencySymbolPaddingCharacter']=$currency->getPaddingCharacter();
+      return $currencies;
+       
+   }
+   
+   
+   public function getAllCurrencies()
+   {
+       try {
+          $currencyDao=new admin_Model_CurrencyDao();
+          $currencyList=$currencyDao->getCurrencies();
+          if($currencyList)
+          {
+              $currencies=array();
+              
+              foreach ($currencyList as $c)
+              {
+                     $currency=new admin_Model_Currency();
+                     $currency->setCurrencyId((integer)$c['ID_Currency']);
+                     $currency->setCurrencyName($c['d__CurrencyName']);
+                     $currency->setCurrencyCode($c['d__CurrencyCode']);
+                     $currency->setCurrencySymbol($c['d__CurrencySymbol']);
+                     $currency->setCurrencySymbolHTML($c['d__CurrencySymbolHTML']);
+                     $currency->setSymbolPossition($c['d__CurrencySymbolPosition']);
+                     $currency->setPriority($c['d__Priority']);
+                     $currency->setBaseRate($c['d__BaseRate']);
+                     $currency->setPaddingCharecter($c['d__CurrencySymbolPaddingCharacter']);
+                     array_push($currencies, $currency);
+              }
+           
+              return $currencies;
+          }
+       
+       } catch (Exception $exc) {
+           echo $exc->getMessage();
+       } 
+       
+       
+   }
+   
+   public function geCurrenciesById($currencyId)
+   {
+       try {
+           if($currencyId==null || $currencyId=="")
+           {
+               throw new Exception("Currency id is null in geCurrenciesById");
+           }
+           else
+           {
+            
+               $currencyDao=new admin_Model_CurrencyDao();
+               $currencies=$currencyDao->getCurrencyList($currencyId);
+               $currency=new admin_Model_Currency();
+               $currency->setCurrencyId((integer)$currencies['ID_Currency']);
+               $currency->setCurrencyName($currencies['d__CurrencyName']);
+               $currency->setCurrencyCode($currencies['d__CurrencyCode']);
+               $currency->setCurrencySymbol($currencies['d__CurrencySymbol']);
+               $currency->setCurrencySymbolHTML($currencies['d__CurrencySymbolHTML']);
+               $currency->setPaddingCharecter($currencies['d__CurrencySymbolPaddingCharacter']);
+               $currency->setSymbolPossition($currencies['d__CurrencySymbolPosition']);
+               $currency->setPriority($currencies['d__Priority']);
+               $currency->setBaseRate($currencies['d__BaseRate']);
+              
+               return $currency;
+           }
+                     
+       } catch (Exception $exc) {
+           echo $exc->getMessage();
+       }
+   }
+   
+   public function deleteCurrency($currencyId)
+   {
+       try {
+           if($currencyId==null || $currencyId=="")
+           {
+               throw new Exception;
+           }
+           else
+           {
+               
+               $currencyDao=new admin_Model_CurrencyDao();
+               $currencyDao->deleteCurrencies($currencyId);
+           }
+       } catch (Exception $exc) {
+           echo $exc->getTraceAsString();
+       }
+      }
+
+
+
+
+   public static function getJson(admin_Model_Currency $currencyDetails,$dataArray){
+        $currencies = array();
+        $currencies['id'] =$currencyDetails->getCurrencyId();
+        $currencies['currencyname'] = $currencyDetails->getCurrencyName();
+        $currencies['currenycode'] = $currencyDetails->getCurrencyCode();
+        $currencies['symbol']=$currencyDetails->getCurrencySymbol();
+        $currencies['htmlsymbol']=$currencyDetails->getCurrencySymbolHTML();
+        $currencies['paddingcharecter']=$currencyDetails->getPaddingCharacter();
+        $currencies['symbolposition']=$currencyDetails->getSymbolPossition();
+        $currencies['baserate']=$currencyDetails->getBaseRate();
+        $currencies['priority']=$currencyDetails->getPriority();
+        $data['currencyDetails'] =  $currencies;
+        $data['currencyNames'] =  $dataArray;
+      
+        return Zend_Json::encode($data);
+    }
+
+}
+

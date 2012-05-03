@@ -1,0 +1,91 @@
+<?php
+include_once 'IptController.php';
+class Admin_WebnewsController extends admin_IptController {
+    
+	
+       
+       public function indexAction() {
+	    $form=new admin_Form_Webnews();
+            $this->view->form=$form;
+            $news=new admin_Model_Webnews();
+            $webnewsList=$news->getWebnews();
+            //pagination test
+            $page=$this->_getParam('page',1);
+            $paginator = Zend_Paginator::factory($webnewsList);
+            $paginator->setItemCountPerPage(10);
+            $paginator->setCurrentPageNumber($page);
+
+            $this->view->webnews=$paginator;
+            //pagination
+           // $arr = array('webnews'=> $webnewsList);
+            //$this->view->assign($arr);
+	 }
+	 
+	public function saveAction(){
+            $this->_helper->viewRenderer->setNoRender(true);
+            $form=new admin_Form_Webnews();
+            if ($this->_request->isPost()) {
+	        $formData = $this->_request->getPost();
+                if ($form->isValid($formData)) {
+                    $webnews=new admin_Model_Webnews();
+                    $webnews->setDate($this->setDateFormat($formData['newsDate']));
+                    $webnews->setHeadLine(strip_tags($formData['headline']));
+                    $webnews->setContent(strip_tags($formData['content']));
+                    if($formData['newsid'])
+                        $webnews->setId((integer)$formData['newsid']);	
+                    // $exitstsflag	=	$webnews->isExists($webnews);
+                    $status = $webnews->save($webnews);
+                    if($status){
+                        $this->_redirect('admin/Webnews');
+                    }
+                    else {
+                        echo "Erorr";exit;
+                    }
+                }else{
+                    $form->populate($formData);
+                }
+            }    
+	}
+	public function getnewsAction(){
+		$news=new admin_Model_Webnews();
+		$newsId = $this->_request->getPost('newsId');
+		if($newsId){
+			$webnewsDetail=$news->getWebnewsDetails((integer)$newsId);
+			$json = admin_Model_Webnews::getJson($webnewsDetail);
+			echo $json;exit;
+		}
+		else{
+			throw new Exception("Empty news id!");
+		}
+	}
+	
+	public function setDateFormat($date){
+		if($date){
+			$dateFormat = date('Y-m-d', strtotime($date));
+			return $dateFormat;
+		}
+		else{
+			throw new Exception("Empty date!");
+		}
+	} 
+	
+	public function deletenewsAction(){
+		$this->_helper->viewRenderer->setNoRender(true);
+		$newsId = (integer)$this->_request->getPost('newsId');
+		if($newsId){
+			$news=new admin_Model_Webnews();
+			$result = $news->deleteNews($newsId);
+			$msg	= array();
+	    	if($result){
+	    		$msg['msg']	= "Successfully deleted!";
+	    	}
+	    	else{
+	    		$msg['msg']	= "Deletion failed!";
+	    	}
+	    	echo  Zend_Json::encode($msg);exit;
+		}else{
+			throw new Exception("Empty news id!");
+		}
+	}
+}
+?>
