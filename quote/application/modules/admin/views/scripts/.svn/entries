@@ -1,92 +1,0 @@
-10
-
-dir
-361
-https://subversion.assembla.com/svn/ipt-quote.2/trunk/application/modules/admin/views/scripts
-https://subversion.assembla.com/svn/ipt-quote.2
-
-
-
-2012-04-12T10:40:45.762374Z
-341
-anoopambujan
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-8cc63e96-eb69-4531-8761-d8db04fe67ac
-
-static-content
-dir
-
-quotes
-dir
-
-buslines
-dir
-
-tutorials
-dir
-
-index
-dir
-
-webnews
-dir
-
-currency
-dir
-
-iptquote
-dir
-
-countries
-dir
-
-rate
-dir
-
-pagination.phtml
-file
-
-
-
-
-2012-04-27T05:50:26.210859Z
-522ca8bb58516180e1d274f0db6e2df0
-2012-04-12T10:40:45.762374Z
-341
-anoopambujan
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1705
-
